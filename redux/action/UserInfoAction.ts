@@ -9,7 +9,7 @@ export enum UserInfoActionType  {
 }
 
 export const UserInfoAction = {
-    checkLogin(): ThunkAction<Promise<void>, RootState, null, Action<string>>{
+    checkLogin(){
         return (async (dispatch: ReduxDispatch)=>{
             const userInfo: UserInfo | undefined = await serverUtils.checkLogin();
             dispatch(InnerAction.setUserInfo(userInfo))
