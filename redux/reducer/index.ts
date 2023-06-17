@@ -16,7 +16,7 @@ type ActionType = {
     payload: any
 }
 
-export function groupBuyReducer(state = initState, action: ActionType): StateType {
+export function groupBuyReducer(state = initState, action: ActionType):StateType {
   switch (action.type) {
     case UserInfoActionType.SET_USER_INFO: {
       const userInfo:UserInfo | undefined = action.payload.userInfo;

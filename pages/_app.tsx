@@ -1,14 +1,26 @@
-import { useReduxDispatch } from '@/redux';
-import { UserInfoAction } from '@/redux/action';
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { useEffect } from 'react'
+import { StrictMode, useEffect } from 'react'
+import { UserInfoAction } from '@/redux/action';
+import { Provider } from 'react-redux';
+import {groupBuyStore, useReduxDispatch} from '@/redux'
+import { UserInfo } from '@/interface';
 
-export default function App({ Component, pageProps }: AppProps) {
-    useEffect(()=>{ // 確認登入
-        UserInfoAction.checkLogin()
-    },[])
 
-  
-  return <Component {...pageProps} />
+export default function App(props: AppProps &{userInfo: UserInfo}) {  
+  return (
+    <StrictMode>
+      <Provider store={groupBuyStore}>
+        <AppContent {...props} />
+      </Provider>
+    </StrictMode>
+  )
 }
+function AppContent({ Component, pageProps,userInfo}: AppProps &{userInfo: UserInfo}) {
+  const dispatch = useReduxDispatch();
+  useEffect(()=>{ // 確認登入
+      dispatch(UserInfoAction.checkLogin());
+  },[userInfo])
+  return <Component {...pageProps} />;
+}
+
