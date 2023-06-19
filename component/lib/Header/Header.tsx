@@ -8,7 +8,7 @@ import { NavLink } from "./NavLink";
 
 
 export function Header() {
-    const userInfo: UserInfo | undefined = useReduxSelector((state)=> state.userInfo);
+    const userInfo: UserInfo | null | undefined = useReduxSelector((state)=> state.userInfo);
     const appName = `輕鬆開好團`;
     const loginUrl = '../login'; // TODO: 登入
     const style: CSSProperties = {

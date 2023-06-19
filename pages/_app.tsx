@@ -1,30 +1,40 @@
 import '@/styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { AppProps } from 'next/app';
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
-import type { AppProps } from 'next/app'
 import { StrictMode, useEffect } from 'react'
 import { UserInfoAction } from '@/redux/action';
 import { Provider } from 'react-redux';
-import {groupBuyStore, useReduxDispatch} from '@/redux'
-import { UserInfo } from '@/interface';
+import {groupBuyStore, useReduxDispatch, useReduxSelector} from '@/redux'
 import { Header } from '@/component';
+import { UserInfo } from '@/interface';
 
 
-export default function App(props: AppProps &{userInfo: UserInfo}) {  
+export function App(props: AppProps) {  
   return (
     <StrictMode>
       <Provider store={groupBuyStore}>
-        <Header/>
         <AppContent {...props} />
       </Provider>
     </StrictMode>
   )
 }
-function AppContent({ Component, pageProps,userInfo}: AppProps &{userInfo: UserInfo}) {
+function AppContent({ Component, pageProps}: AppProps) {
   const dispatch = useReduxDispatch();
+  const userInfo: UserInfo | null | undefined = useReduxSelector((state)=> state.userInfo);
+
   useEffect(()=>{ // 確認登入
       dispatch(UserInfoAction.checkLogin());
-  },[userInfo])
-  return <Component {...pageProps} />;
+  },[])
+  if (userInfo === undefined) return <div></div>
+  return(
+    <>
+      <Header/>
+      <Component {...pageProps} />
+    </>
+  )
+  ;
 }
 
+export default App;

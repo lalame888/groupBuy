@@ -15,7 +15,7 @@ export class ServerUtils {
         baseURL: this.apiUrl
       }));
   }
-  public async checkLogin(): Promise<UserInfo| undefined> {
+  public async checkLogin(): Promise<UserInfo| null> {
     const result = myUser.clone();
     const storeUidList = await this.loadFavoriteStoreUidList(result);
     result.favoriteStoreUidList = storeUidList;
