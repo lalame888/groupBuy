@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { CSSProperties, useState } from "react";
 
 
 interface NavLinkProps {
     to: string,
+    isActive: boolean
     children: React.ReactNode
 }
 export function NavLink(props: NavLinkProps){
     const [isHover, setIsHover] = useState<boolean>(false);
-    const router = useRouter();
     const navLinkStyle: CSSProperties = {
         flexFlow: 'column',
         fontSize: '17px',
@@ -25,18 +24,15 @@ export function NavLink(props: NavLinkProps){
     }
     const usingLinkStyle : CSSProperties = {
         ...navLinkStyle,
-        backgroundColor: 'white',
-
+        backgroundColor: 'white'
     }
     return (
-        <Link href={`${props.to}`}>
-            <div 
-                style={(router.pathname ===props.to || isHover)?usingLinkStyle:navLinkStyle}
-                onMouseEnter={()=> setIsHover(true)}
-                onMouseLeave={()=> setIsHover(false)}
-            >
+        <Link href={`${props.to}`}                 
+            style={(props.isActive || isHover)?usingLinkStyle:navLinkStyle}
+            onMouseEnter={()=> setIsHover(true)}
+            onMouseLeave={()=> setIsHover(false)}
+        >
                 {props.children}
-            </div>
         </Link>
     )
 

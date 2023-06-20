@@ -10,10 +10,7 @@ export const UserInfoAction = {
     checkLogin(){
         return (async (dispatch: ReduxDispatch)=>{
             const userInfo: UserInfo | null = await serverUtils.checkLogin();
-            setTimeout(()=>{
-                dispatch(InnerAction.setUserInfo(userInfo))
-            },4000)
-           
+            dispatch(InnerAction.setUserInfo(userInfo))
         })
     },
 }
