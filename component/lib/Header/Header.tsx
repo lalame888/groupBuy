@@ -1,4 +1,4 @@
-import { PageState, UserInfo } from "@/interface"
+import { UserInfo } from "@/interface"
 import { useReduxSelector } from "@/redux";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,12 +7,15 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink } from "./NavLink";
 import { DEFAULT_USER_IMAGE } from "@/data";
 import { useRouter } from "next/router";
+import { PageRoute, PageState } from "@/feature";
 
 
 export function Header() {
     const userInfo: UserInfo | null | undefined = useReduxSelector((state)=> state.userInfo);
     const appName = `輕鬆開好團`;
     const router = useRouter();
+    const path = router.pathname.split('/')[1];
+    console.log('path',path)
     const loginUrl = '../login'; // TODO: 登入
     const style: CSSProperties = {
         color: '#ddd',
@@ -69,9 +72,9 @@ export function Header() {
                                     {Object.entries(PageState).map(([key,value])=>{
                                         return (
                                             <NavLink 
-                                                to={`/${value}`}  
+                                                to={`/${value}/${PageRoute.defaultChild(value).page}`}  
                                                 key={value}
-                                                isActive={router.pathname === `/${value}`}
+                                                isActive={path === value}
                                             >
                                                 {key}
                                             </NavLink>

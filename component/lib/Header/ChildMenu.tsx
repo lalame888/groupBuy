@@ -1,4 +1,4 @@
-import { PageState } from "@/interface";
+import { PageRoute, PageState } from "@/feature";
 import { THEME } from "@/styles/theme";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -15,27 +15,9 @@ export function ChildMenu(props: ChildMenuProps){
         ...props.style
     }
     const router = useRouter();
-    const parentPath = router.pathname.split('\\')[1];
-    const childrenPath = router.pathname.split('\\')[2];
-    const pageMenu = useMemo(()=>{
-        switch(router.pathname) {
-            case PageState['開團']:
-                return [
-                {pageName: '開新團',page: 'NewOpen'},
-                {pageName: '跟新團',page: 'JoinNew'},
-                {pageName: '目前團單',page: 'NowGroup'},
-                {pageName: '歷史團單',page: 'HistoryGroup'},
-                ];
-            case PageState['瀏覽商家']:
-                return [
-                    {pageName: '搜尋商家',page: 'SearchStore'},
-                    {pageName: '收藏商家',page: 'StoreStore'}
-                ]
-            default: 
-                return [];
-        }
-        
-    },[parentPath])
+    const parentPath = router.pathname.split('/')[1] as PageState;
+    const childrenPath = router.pathname.split('/')[2];
+    const pageMenu = PageRoute.childMenu(parentPath);
 
     return (
         <div style={menuStyle}>

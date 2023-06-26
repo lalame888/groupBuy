@@ -1,8 +1,21 @@
-export enum PageState {
-    '開團' = 'openGroup',
-    '瀏覽商家' = 'StroePage',
-    '使用說明' = 'help',
-    '關於輕鬆開好團' = 'info',
-    '聯絡我們' = 'mail'
-  }
-  
+
+
+export enum LoggingLevel {
+  'TRACE',
+  'DEBUG',
+  'INFO',
+  'WARN',
+  'ERROR',
+  'FATAL'
+}
+
+export enum ErrorCode {
+  '載入用戶資訊錯誤' = '0010',
+  '載入目前團單列表錯誤' = '0020',
+}
+
+export enum LoadStatus {
+  '載入中' = 'loading',
+  '載入成功' = 'success',
+  '載入失敗' = 'error'
+}

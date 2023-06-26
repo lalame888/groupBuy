@@ -1,7 +1,8 @@
 import { generateUUID } from "@/utils";
 import { Cloneable } from "./Cloneable";
 import { UserOrder } from "./Order";
-import { UserInfo } from "./UserInfo";
+import { UserData } from "./UserInfo";
+import { StoreData } from "./Store";
 
 export enum GroupBuyStatus {
     '開放跟團中', // 大家都可以編輯
@@ -29,9 +30,9 @@ type GroupBuyData = {
     setting: GroupSetting,
     store: StoreData| undefined; // 所選的店家
 }
-type LoadGroupData = {
+export type LoadGroupData = {
     data: GroupBuyData,
-    builder: UserInfo,
+    builder: UserData,
     userOrder: Array<UserOrder>
 }
 type GroupBuyDataProperty = keyof GroupBuyData;
@@ -40,7 +41,7 @@ export class GroupBuyObject extends Cloneable {
     private data : GroupBuyData;
     private userOrder: Array<UserOrder> = []; //目前這個團單所有跟團者的訂單
     constructor(
-        public readonly builder: UserInfo, // 開團者 
+        public readonly builder: UserData, // 開團者 
         data?: Partial<GroupBuyData>
     ){ 
         super();
