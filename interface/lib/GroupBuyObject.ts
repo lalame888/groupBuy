@@ -1,4 +1,4 @@
-import { generateUUID } from "@/utils";
+import { generateUUID, getKeyByValue, getTimeString } from "@/utils";
 import { Cloneable } from "./Cloneable";
 import { UserOrder } from "./Order";
 import { UserData } from "./UserInfo";
@@ -115,5 +115,29 @@ export class GroupBuyObject extends Cloneable {
     // 和目前跟團團單有關的功能
 
 
+    // 和狀態有關
+    get isEditAble(): boolean {
+        return this.data.statues === GroupBuyStatus['開放跟團中']
+    }
+    
+    get isEnd(): boolean {
+        return this.data.statues === GroupBuyStatus['已結束'] || this.data.statues === GroupBuyStatus['已取消團單']
+    }
+
+    get statusText(): string {
+        return getKeyByValue(GroupBuyStatus, this.data.statues)
+    }
+    get joinListLength(): number {
+        return this.userOrder.length
+    }
+
+    get endTimeString(): string {
+        if (this.data.setting.endTime && this.isEditAble) {
+            return `跟團期限：${ getTimeString(this.setting.endTime)}`
+        } else if (this.data.deleteTime) {
+            return `結束時間：${getTimeString(this.data.deleteTime)}`
+        }
+        return ''
+    }
 
 }

@@ -2,7 +2,7 @@
 import { GroupBuyObject } from "@/interface/lib/GroupBuyObject";
 import { CSSProperties} from "react"
 import { useGroupBuyList } from "./utils/useNowGroupBuy";
-import { ChildMenu, Layout, MyHoverButton, PaginationSelector, SearchInput } from "@/component";
+import { ChildMenu, Layout, MyHoverButton, PaginationSelector, SearchInput, GroupBuyListCard } from "@/component";
 
 export default function NowGroup(){
     const {

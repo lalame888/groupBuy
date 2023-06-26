@@ -2,6 +2,7 @@ import { LoadStatus, UserInfo } from "@/interface";
 import { useReduxSelector } from "@/redux";
 import { useEffect } from "react";
 import { MyHoverButton } from "../Button";
+import { Container } from "react-bootstrap";
 
 interface LayoutProps {
     children: React.ReactNode,
@@ -32,6 +33,10 @@ export function Layout(props: LayoutProps){
         // TODO: 顯示載入畫面
         return <div>載入中頁面</div>
     } else {
-        return props.children // 照常顯示
+        return (
+            <Container style={{maxWidth: '900px'}}>
+                {props.children}
+            </Container>
+        ) // 照常顯示
     }
 }

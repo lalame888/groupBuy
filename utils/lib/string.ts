@@ -15,3 +15,11 @@ export function toSBC(str: string) {
     }
     return result;
  }
+
+export function getTimeString(time: Date| undefined | string) : string {
+    if (time === undefined) return ''
+    if (typeof(time) === 'string') {
+        time = new Date(time)
+    }
+    return `${time.toLocaleDateString()} ${time.toLocaleTimeString('en-GB')}`
+}
