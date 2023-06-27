@@ -25,6 +25,9 @@ const meta: Meta<typeof MyHoverButton> = {
     },
     children:{
       description: '按鈕內文'
+    },
+    size:{
+      description: '按鈕大小與長度'
     }
   },
 };
@@ -32,7 +35,6 @@ const meta: Meta<typeof MyHoverButton> = {
 export default meta;
 type Story = StoryObj<typeof MyHoverButton>;
 
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
   args: {
     children:'預設的按鈕'
@@ -46,3 +48,9 @@ export const Green: Story = {
   },
 };
 
+export const LongButton: Story = {
+  args: {
+    ...Primary.args,
+    size: 'long'
+  },
+};

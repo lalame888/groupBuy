@@ -7,6 +7,7 @@ import styled from 'styled-components';
 interface HoverButtonProps {
     to?: string;
     theme?:  'green' 
+    size?: 'long'
     style?: CSSProperties;
     onClick?(event: React.MouseEvent): void;
     children?: JSX.Element | string
@@ -22,7 +23,6 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
         green: {
             
             backgroundColor: THEME.lightGreenColor,
-            padding:'6px 20px',
             borderColor:'#489A81',
             hover:{
                 backgroundColor: '#7acac5ad'
@@ -30,9 +30,7 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
         }
     }
     const defaultTheme: HoverThemeType = {
-        
         borderColor: '',
-        padding: '6px 40px',
         backgroundColor: 'white',
         hover: {
             backgroundColor: THEME.lightGreenColor
@@ -45,7 +43,7 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
         display: flex;
         font-size: 16px;
         border-radius: 25px;
-        padding:${theme.padding};
+        padding: 6px ${(props.size === 'long'? '40px': '20px')};
         border: 1px solid ${theme.borderColor};
         background-color: ${theme.backgroundColor};
         
