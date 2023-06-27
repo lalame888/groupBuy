@@ -12,12 +12,15 @@ interface HoverButtonProps {
     children?: JSX.Element | string
     disabled?: boolean
 }
-
-
+type HoverThemeType = CSSProperties & {hover: CSSProperties}
+type ThemeType = {
+    green: HoverThemeType
+}
 export function MyHoverButton(props: HoverButtonProps): JSX.Element {
     const ref= useRef<HTMLAnchorElement>(null);
-    const themes = {
+    const themes:ThemeType = {
         green: {
+            
             backgroundColor: THEME.lightGreenColor,
             padding:'6px 20px',
             borderColor:'#489A81',
@@ -26,7 +29,8 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
             }
         }
     }
-    const defaultTheme = {
+    const defaultTheme: HoverThemeType = {
+        
         borderColor: '',
         padding: '6px 40px',
         backgroundColor: 'white',
@@ -37,17 +41,17 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
     const theme =(props.theme) ? themes[props.theme] :defaultTheme
     const HoverButton = styled(Button)`
         word-break: keep-all;
-        user-select: none;
+        user-select: none;        
         display: flex;
         font-size: 16px;
         border-radius: 25px;
         padding:${theme.padding};
-        border: 1px solid ${theme.borderColor}
-        background-color: ${theme.backgroundColor}
-        ${(props)=>props.style && {...props.style}}
+        border: 1px solid ${theme.borderColor};
+        background-color: ${theme.backgroundColor};
         
         &:hover{
-            background-color:${theme.hover.backgroundColor} 
+            background-color:${props.disabled ? '': theme.hover.backgroundColor};
+            cursor: ${props.disabled ?'': 'pointer'};
         }
     `
     function onClick(event: React.MouseEvent<Element, MouseEvent>){

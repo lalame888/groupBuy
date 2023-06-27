@@ -35,7 +35,7 @@ type Story = StoryObj<typeof MyHoverButton>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
   args: {
-    children:'普通的按鈕'
+    children:'預設的按鈕'
   },
 };
 
