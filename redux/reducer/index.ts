@@ -1,14 +1,12 @@
-import { UserInfo } from "@/interface";
+import { GroupBuyObject, UserInfo } from "@/interface";
 import { UserInfoActionType } from "../action";
 
 export type StateType = {
   userInfo: undefined | UserInfo | null // null表示驗證過後沒有登入
-  isLoading: boolean
 }
 
 const initState: StateType = {
-  isLoading: false,
-  userInfo: undefined
+  userInfo: undefined,
 };
 
 type ActionType = {

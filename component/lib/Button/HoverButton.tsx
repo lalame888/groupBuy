@@ -1,6 +1,6 @@
 import { THEME } from "@/styles/theme";
 import Link from "next/link";
-import React, { CSSProperties, useRef, useState } from "react"
+import React, { CSSProperties, useRef } from "react"
 import { Button } from "react-bootstrap";
 import styled from 'styled-components';
 
@@ -43,13 +43,17 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
         display: flex;
         font-size: 16px;
         border-radius: 25px;
+        color: black;
         padding: 6px ${(props.size === 'long'? '40px': '20px')};
         border: 1px solid ${theme.borderColor};
         background-color: ${theme.backgroundColor};
-        
+        align-items: center;
+
         &:hover{
+            border: 1px solid ${theme.borderColor};
             background-color:${props.disabled ? '': theme.hover.backgroundColor};
             cursor: ${props.disabled ?'': 'pointer'};
+            color: black;
         }
     `
     function onClick(event: React.MouseEvent<Element, MouseEvent>){
@@ -63,8 +67,11 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
     
     return (
         <>
+        
             <HoverButton 
+                 variant="light"
                 {...props}
+                
                 onClick={onClick}
             >
                 {props.children}

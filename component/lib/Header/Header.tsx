@@ -15,7 +15,6 @@ export function Header() {
     const appName = `輕鬆開好團`;
     const router = useRouter();
     const path = router.pathname.split('/')[1];
-    console.log('path',path)
     const loginUrl = '../login'; // TODO: 登入
     const style: CSSProperties = {
         color: '#ddd',

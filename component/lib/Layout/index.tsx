@@ -3,6 +3,7 @@ import { useReduxSelector } from "@/redux";
 import { useEffect } from "react";
 import { MyHoverButton } from "../Button";
 import { Container } from "react-bootstrap";
+import styled from "styled-components";
 
 interface LayoutProps {
     children: React.ReactNode,
@@ -21,22 +22,23 @@ export function Layout(props: LayoutProps){
             location.href = 'index.html'; // TODO: 還要測試這個是否正確
         }
     },[userInfo,props.shouldLoginTurnToHome])
+    const Warper = styled(Container)`max-width: 900px`;
 
     if (props.status && props.status.loadStatus === LoadStatus['載入失敗']) {
         // TODO: 顯示錯誤訊息顯示頁面
         // 如果有錯誤訊息就顯示錯誤訊息
-        return <div>錯誤訊息頁面 {props.status.errorMessage ?`、錯誤訊息 = ${props.status.errorMessage}` :''}</div>
+        return <Warper>錯誤訊息頁面 {props.status.errorMessage ?`、錯誤訊息 = ${props.status.errorMessage}` :''}</Warper>
     } else if (userInfo === null && props.shouldLogin) {
         // TODO: 顯示該頁面應該要登入&可以登入的按鈕
-        return <div>請登入頁面 <MyHoverButton to="login">登入</MyHoverButton></div>
+        return <Warper>請登入頁面 <MyHoverButton to="login">登入</MyHoverButton></Warper>
     } else if (props.status && props.status.loadStatus === LoadStatus['載入中']){
         // TODO: 顯示載入畫面
-        return <div>載入中頁面</div>
+        return <Warper>載入中頁面</Warper>
     } else {
         return (
-            <Container style={{maxWidth: '900px'}}>
+            <Warper>
                 {props.children}
-            </Container>
+            </Warper>
         ) // 照常顯示
     }
 }

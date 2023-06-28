@@ -3,7 +3,6 @@ import { MyHoverButton, StoreImage } from "@/component"
 import { GroupBuyObject } from "@/interface"
 import { THEME } from "@/styles/theme"
 import { CSSProperties } from "react"
-import { Container } from "react-bootstrap"
 
 interface GroupBuyListCardProps {
     groupBuyObject: GroupBuyObject
@@ -66,8 +65,9 @@ export function GroupBuyListCard(props: GroupBuyListCardProps ){
             </div>
             <div style={buttonDivStyle}>
                 <MyHoverButton 
+                    size="long"
                     style={buttonStyle}
-                    to={`/openGroup/GroupBuyInfo/info/id=${props.groupBuyObject.uid}`}
+                    to={`/openGroup/GroupBuyInfo?id=${props.groupBuyObject.uid}`}
                 >
                     查看訂單
                 </MyHoverButton>
