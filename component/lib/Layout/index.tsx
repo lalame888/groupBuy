@@ -14,6 +14,8 @@ interface LayoutProps {
         errorMessage?: string // 是否有錯誤訊息，如果狀態為失敗＆有錯誤訊息顯示錯誤訊息
     }
 }
+const Warper = styled(Container)`max-width: 900px`;
+
 export function Layout(props: LayoutProps){
     const userInfo: UserInfo | null | undefined = useReduxSelector((state)=> state.userInfo) 
 
@@ -22,7 +24,6 @@ export function Layout(props: LayoutProps){
             location.href = 'index.html'; // TODO: 還要測試這個是否正確
         }
     },[userInfo,props.shouldLoginTurnToHome])
-    const Warper = styled(Container)`max-width: 900px`;
 
     if (props.status && props.status.loadStatus === LoadStatus['載入失敗']) {
         // TODO: 顯示錯誤訊息顯示頁面

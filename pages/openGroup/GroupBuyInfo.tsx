@@ -3,16 +3,19 @@ import { useGroupBuyInfo } from "./utils/useGroupBuyInfo";
 import { EditGroup, EditOrder, GroupPageProps, Layout,GroupInfoPage } from "@/component";
 import { GroupBuyObject, InfoPage } from "@/interface";
 import { useReduxSelector } from "@/redux";
+import { useMemo } from "react";
 
 export default function GroupBuyInfo(){
     const router = useRouter();
-    const groupId: string = router.query.id as string;
+    const groupId = router.query.id as string || ''
+    
+    
     const {
         groupBuyObject,
         pageName,setPageName,
         status,
         update
-    } = useGroupBuyInfo(groupId);
+    } = useGroupBuyInfo(groupId, router.isReady);
     const userInfo = useReduxSelector((state)=> state.userInfo);
     const props: GroupPageProps = {
         groupBuyObject: groupBuyObject as GroupBuyObject,

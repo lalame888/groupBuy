@@ -42,6 +42,20 @@ export class ServerUtils {
     return Promise.resolve(result);
   }
 
+  public async loadGroupBuy(groupId: string):Promise<GroupBuyObject | null> {
+    return new Promise(async (resolve)=>{
+      const nowList = await this.loadUserGroupBuyList('now');
+      const hisList = await this.loadUserGroupBuyList('history');
+      const result = [...nowList,...hisList].find((g)=>g.uid === groupId);
+      setTimeout(()=>{
+        if (result) resolve(result);
+        else resolve(null);
+      },10000)
+    });
+    
+    
+  }
+
   public addLog(message: string, logLevel: LoggingLevel, errorCode?: ErrorCode): Promise<void> {
     return Promise.resolve()
   }

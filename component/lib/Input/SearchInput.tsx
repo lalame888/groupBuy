@@ -10,6 +10,12 @@ interface SearchInputProps {
     value: string
 }
 
+const SearchIcon = styled(FontAwesomeIcon as any)`
+        cursor: pointer;
+        &:hover{
+            color: #489A81;
+        }
+    `
 export function SearchInput(props: SearchInputProps){ 
     const [searchInput , setSearchInput] = useState<string>('');
     useEffect(()=>{setSearchInput(props.value)},[props.value])
@@ -33,21 +39,14 @@ export function SearchInput(props: SearchInputProps){
         width: '90%'
     }
 
-
     function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>){
         if (event.key === 'Enter' || event.key === 'NumberEnter'){
             event.preventDefault();
             props.onChange(searchInput)
-            console.log('d')
         }
     }
 
-    const SearchIcon = styled(FontAwesomeIcon as any)`
-        cursor: pointer;
-        &:hover{
-            color: #489A81;
-        }
-    `
+    
     return (
         <div style={style}>
             <input 
@@ -62,10 +61,10 @@ export function SearchInput(props: SearchInputProps){
                 style={searchInputStyle} 
                 placeholder={'Search...'}
             />
-            <SearchIcon 
-                icon={faSearch}
-                onClick={()=> props.onChange(searchInput)}
-            />
+                <SearchIcon 
+                    icon={faSearch}
+                    onClick={()=> props.onChange(searchInput)}
+                />
            
         </div>
     )
