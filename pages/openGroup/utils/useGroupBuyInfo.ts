@@ -10,6 +10,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean){
     const [pageName, setPageName] = useState<InfoPage>(InfoPage['資訊頁']);
     
     const status: LoadingStatus = useMemo(()=>{
+        
         if (groupBuyObject === undefined) {
             return {
                 loadStatus: LoadStatus['載入中']
@@ -27,6 +28,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean){
     },[groupBuyObject])
     
     useEffect(()=>{
+        let isMounted = true;
         if (!isReady) {
             setGroupBuyObject(undefined);
         } else if (!groupId) {
@@ -39,13 +41,21 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean){
 
         async function loadGroupBuy(){
             try {
-                const group = await serverUtils.loadGroupBuy(groupId);
-                console.log(group)
-                if (groupId && groupId === group?.uid)setGroupBuyObject(group);
+                if (isMounted) {
+                    const group = await serverUtils.loadGroupBuy(groupId);
+                    if (isMounted) {
+                        setGroupBuyObject(group);
+                    }
+                }
             } catch (error) {
                 setGroupBuyObject(null);
                 serverUtils.addLog(``,LoggingLevel['ERROR'],ErrorCode['載入團單資訊發生錯誤']);
             }
+        }
+
+        return ()=>{
+            //  取消載入
+            isMounted = false;
         }
     },[groupId])
     
