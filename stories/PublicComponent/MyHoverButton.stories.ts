@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { MyHoverButton } from '../../component';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const meta: Meta<typeof MyHoverButton> = {
-  title: 'PublicComponent/MyHoverButton',
+  title: 'PublicComponent/Button/MyHoverButton',
   component: MyHoverButton,
   tags: ['autodocs'],
   parameters:{

@@ -12,7 +12,9 @@ export enum LoggingLevel {
 export enum ErrorCode {
   '載入用戶資訊錯誤' = '0010',
   '載入目前團單列表錯誤' = '0020',
-  '載入團單資訊發生錯誤' = '0030'
+  '載入團單資訊發生錯誤' = '0030',
+  '團單變更狀態失敗' = '0040',
+  
 }
 
 export enum LoadStatus {

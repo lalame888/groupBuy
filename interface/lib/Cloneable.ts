@@ -1,6 +1,6 @@
 
-export class Cloneable {
-    public clone() {
+export class Cloneable<T> {
+    public clone(): T {
       return Object.assign(Object.create(Object.getPrototypeOf(this)), this);
     }
   }

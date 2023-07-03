@@ -1,14 +1,19 @@
 import { serverUtils } from "@/feature";
-import { ErrorCode, GroupBuyObject, InfoPage, LoadStatus, LoadingStatus, LoggingLevel } from "@/interface";
-import { useCallback, useEffect, useMemo, useState } from "react";
-
-
-
+import { ErrorCode, GroupBuyObject, GroupBuyStatus, InfoPage, LoadStatus, LoadingStatus, LoggingLevel } from "@/interface";
+import { getKeyByValue } from "@/utils";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export function useGroupBuyInfo(groupId: string, isReady: boolean){
+    const mounted = useRef(false);
+    useEffect(() => { // 在變更的時候進行mounted的取消
+            mounted.current = true; 
+            return () => { mounted.current = false; }; 
+    }, [groupId]);
+
+
     const [groupBuyObject, setGroupBuyObject] = useState<undefined | null | GroupBuyObject>(undefined);
     const [pageName, setPageName] = useState<InfoPage>(InfoPage['資訊頁']);
-    
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const status: LoadingStatus = useMemo(()=>{
         
         if (groupBuyObject === undefined) {
@@ -18,7 +23,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean){
         } else if (groupBuyObject === null) {
             return {
                 loadStatus: LoadStatus['載入失敗'],
-                errorMessage: '找不到團單'
+                errorMessage: errorMessage || '找不到團單'
             }
         } else {
             return {
@@ -28,7 +33,6 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean){
     },[groupBuyObject])
     
     useEffect(()=>{
-        let isMounted = true;
         if (!isReady) {
             setGroupBuyObject(undefined);
         } else if (!groupId) {
@@ -41,32 +45,52 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean){
 
         async function loadGroupBuy(){
             try {
-                if (isMounted) {
+                if (mounted.current) {
+                    setErrorMessage('');
                     const group = await serverUtils.loadGroupBuy(groupId);
-                    if (isMounted) {
+                    if (mounted.current) {
                         setGroupBuyObject(group);
                     }
                 }
             } catch (error) {
+                setErrorMessage(`載入團單發生錯誤！ 錯誤代碼：${ErrorCode['載入團單資訊發生錯誤']} , 請重新嘗試或來信回報`)
+                serverUtils.addLog(`${error}`,LoggingLevel['FATAL'],ErrorCode['載入團單資訊發生錯誤']);
                 setGroupBuyObject(null);
-                serverUtils.addLog(``,LoggingLevel['ERROR'],ErrorCode['載入團單資訊發生錯誤']);
             }
-        }
-
-        return ()=>{
-            //  取消載入
-            isMounted = false;
         }
     },[groupId])
     
 
     // === 更動狀態的function ===
     const updatePayState = useCallback(()=>{
-        throw Error('尚未實作')
+        
+        throw Error('尚未實作') // TODO
     },[groupBuyObject])
     
-    const updateGroupState = useCallback((type:'結算'|'刪除'|'完成')=>{
-        throw Error('尚未實作')
+    const updateGroupState = useCallback((type: GroupBuyStatus)=>{
+        if (groupBuyObject) {
+            groupState(groupBuyObject,type);
+        }
+        async function groupState(groupBuyObject: GroupBuyObject,type: GroupBuyStatus) {
+            try {
+                const changeTime: string = await serverUtils.updateGroupState(groupBuyObject.uid, type);
+                if (mounted.current) {
+                    setGroupBuyObject((old)=>{
+                        if (old) {
+                            const newObject = old.clone();
+                            newObject.setStatues(type,changeTime);
+                            return newObject;
+                        }
+                        return old;
+                    })
+                }
+            } catch (error) {
+                setErrorMessage(`狀態變更失敗! 錯誤代碼: ${ErrorCode['團單變更狀態失敗']} ，請再試一次或是來信回報`);
+                const errorLog = `團單變更狀態失敗 >> groupId = ${groupBuyObject.uid} ，從${groupBuyObject.statusText} 狀態改成 :${getKeyByValue(GroupBuyStatus,type)}，錯誤訊息: ${error}`;
+                serverUtils.addLog(errorLog,LoggingLevel['DEBUG'],ErrorCode['團單變更狀態失敗'])
+            }
+        }
+        throw Error('尚未實作') // TODO
     },[groupBuyObject])
     return {
         groupBuyObject,
@@ -75,6 +99,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean){
         update:{
             updatePayState,
             updateGroupState
-        }
+        },
+        errorMessage
     }
 }

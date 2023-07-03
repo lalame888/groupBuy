@@ -13,13 +13,12 @@ export function useGroupBuyList(type: 'now' | 'history'){
     const [searchInput , setSearchInput] = useState<string>('');
     useEffect(()=>{
         if (userInfo) {
-            loadGroupBuyList(userInfo);
+            loadGroupBuyList();
         } else {
             setGroupBuyList([]);
         }
-        async function loadGroupBuyList(userInfo: UserInfo){
+        async function loadGroupBuyList(){
             try {
-                // TODO loaging畫面、錯誤訊息防呆要做
                 const list =  await serverUtils.loadUserGroupBuyList(type); // 使用者資訊會用JWT去解
                 setGroupBuyList(list);
             } catch (error) {

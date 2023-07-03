@@ -1,8 +1,9 @@
 
 
-import { ErrorCode, GroupBuyObject, LoggingLevel, UserInfo } from '@/interface';
+import { ErrorCode, GroupBuyObject, GroupBuyStatus, LoggingLevel, UserInfo } from '@/interface';
 import axios, { AxiosInstance, AxiosResponse, CancelTokenSource } from 'axios';
 import { groupBuyData1, groupBuyObject2, myUser } from './FakeData';
+import { getTimeString } from '@/utils';
 
 export class ServerUtils {
   constructor(
@@ -54,6 +55,11 @@ export class ServerUtils {
     });
     
     
+  }
+
+  public updateGroupState(groupId: string, type: GroupBuyStatus): Promise<string>{
+    const now = new Date();
+    return Promise.resolve(getTimeString(now));
   }
 
   public addLog(message: string, logLevel: LoggingLevel, errorCode?: ErrorCode): Promise<void> {

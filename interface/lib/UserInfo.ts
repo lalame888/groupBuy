@@ -10,7 +10,7 @@ export type UserInfoJSON = {
     userName: string,
     loginId: string
   }
-  export class UserInfo extends Cloneable implements UserInfoJSON {
+  export class UserInfo extends Cloneable<UserInfo> implements UserInfoJSON {
     public pictureUrl: string| undefined;
     public favoriteStoreUidList:Array<string> = [] // 最愛的清單
     constructor(

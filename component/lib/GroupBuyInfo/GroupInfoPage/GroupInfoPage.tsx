@@ -1,14 +1,14 @@
-import { GroupBuyObject } from "@/interface";
+import { GroupBuyStatus, InfoPage } from "@/interface";
 import { GroupPageProps } from "../utils";
 import { GroupInfoDiv } from "./GroupInfoDiv";
 import { PageTitle } from "@/component";
+import { GroupTool } from "./GroupTool";
 
-interface GroupInfoPage extends GroupPageProps {
+interface GroupInfoPageProps extends GroupPageProps {
     updatePayState(): void // 更動繳費或取貨狀態
-    updateGroupState(type:'結算'|'刪除'|'完成'): void
+    updateGroupState(type:GroupBuyStatus): void
 }
-export function GroupInfoPage(props: GroupInfoPage){
-
+export function GroupInfoPage(props: GroupInfoPageProps){
     const {
         store,
         builder, 
@@ -16,19 +16,23 @@ export function GroupInfoPage(props: GroupInfoPage){
         endTimeString, 
         joinListLength,
         groupName,
-        isEnd
+        isEnd,
+        isEditAble,
+        endTime
     } = props.groupBuyObject
     
     return (
         <div>
             <PageTitle title={groupName}>
-                <>
-                {!isEnd && <div>
-                {
-                    // TODO: 工具列
-                }    
-                </div>} 
-                </>
+                <> {!isEnd && 
+                    <GroupTool
+                        isOwner={builder.loginId === props.userInfo?.loginId}
+                        isEditAble={isEditAble}
+                        endTime={endTime}
+                        changeStatus={props.updateGroupState}
+                        toEditGroup={()=> props.setPageName(InfoPage['編輯團單'])}
+                    />
+                }</>
             </PageTitle>
             <GroupInfoDiv 
                 store={store}

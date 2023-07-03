@@ -6,13 +6,13 @@ import { StoreData } from "./Store";
 
 export enum GroupBuyStatus {
     '開放跟團中', // 大家都可以編輯
-    '結單收貨中', // 要給大家確認自己有繳錢、有拿到東西  已經不能跟單還有編輯訂單
-    '已結束' ,  // 順利完成的
+    '結單中', // 要給大家確認自己有繳錢、有拿到東西  已經不能跟單還有編輯訂單
+    '已完成' ,  // 順利完成的
     '已取消團單' // 中途刪掉的
 }
 type GroupSetting = {
     canNewTerm: boolean, // 是不是可以自行新增菜單品項,
-    endTime: Date | undefined,
+    endTime: string | undefined, // 截止跟團的時間，包含設定的時間或是手動截止的時間
     openOrderView: boolean, // 開放別人觀看團單
     addNote: boolean, // 是不是可以有備註
     limitPeople: number | undefined, // 是不是有限制人數
@@ -26,7 +26,7 @@ type GroupBuyData = {
     uid: string, // 該團的uid
     title: string // 開團的title
     statues: GroupBuyStatus
-    deleteTime: Date | undefined; // 被刪除的時間 沒被刪除就是undefined
+    deleteTime: string | undefined; // 被刪除or完成的時間 還沒完結undefined
     setting: GroupSetting,
     store: StoreData| undefined; // 所選的店家
 }
@@ -37,7 +37,7 @@ export type LoadGroupData = {
 }
 type GroupBuyDataProperty = keyof GroupBuyData;
 
-export class GroupBuyObject extends Cloneable {
+export class GroupBuyObject extends Cloneable<GroupBuyObject> {
     private data : GroupBuyData;
     private userOrder: Array<UserOrder> = []; //目前這個團單所有跟團者的訂單
     constructor(
@@ -85,12 +85,18 @@ export class GroupBuyObject extends Cloneable {
     set title(title: string) {
         this.dataSetter('title', title);
     }
-    public setStatues(statues: GroupBuyStatus, endTime?: Date) {
+    public setStatues(statues: GroupBuyStatus, endTime?: string) {
         this.dataSetter('statues', statues);
         switch (statues){
-            case GroupBuyStatus['已結束']:
+            case GroupBuyStatus['已完成']:
             case GroupBuyStatus['已取消團單']:
                 this.dataSetter('deleteTime', endTime);
+                break;
+            case GroupBuyStatus['開放跟團中']: 
+                this.setting = {...this.data.setting, endTime: undefined}
+                break;
+            case GroupBuyStatus['結單中']:
+                this.setting = {...this.data.setting, endTime}
                 break;
         }
     }
@@ -121,7 +127,7 @@ export class GroupBuyObject extends Cloneable {
     }
     
     get isEnd(): boolean {
-        return this.data.statues === GroupBuyStatus['已結束'] || this.data.statues === GroupBuyStatus['已取消團單']
+        return this.data.statues === GroupBuyStatus['已完成'] || this.data.statues === GroupBuyStatus['已取消團單']
     }
 
     get statusText(): string {
@@ -130,14 +136,22 @@ export class GroupBuyObject extends Cloneable {
     get joinListLength(): number {
         return this.userOrder.length
     }
-
+    get endTime(): Date|undefined {
+        const time =  (this.data.deleteTime ) ? this.data.deleteTime : this.data.setting.endTime
+        if (time) return new Date(time);
+        return undefined
+    }
     get endTimeString(): string {
-        if (this.data.setting.endTime && this.isEditAble) {
-            return `跟團期限：${ getTimeString(this.setting.endTime)}`
-        } else if (this.data.deleteTime) {
-            return `結束時間：${getTimeString(this.data.deleteTime)}`
+        if (this.endTime) {
+            if ( this.isEditAble) {
+                return `跟團開放截止時間：${ getTimeString(this.endTime)}`
+            }  {
+                return `結束時間：${getTimeString(this.endTime)}`
+            }
         }
         return ''
     }
+
+    
 
 }
