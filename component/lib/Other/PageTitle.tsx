@@ -20,7 +20,7 @@ export function PageTitle(props: PageTitleProps){
     return(
         
         <div style={style}>
-            <h3 style={{margin: '0px'}}>{props.title}</h3>
+            <h4 style={{margin: '0px'}}>{props.title}</h4>
             {
                 props.children
             }                            

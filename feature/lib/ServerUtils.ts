@@ -51,7 +51,7 @@ export class ServerUtils {
       setTimeout(()=>{
         if (result) resolve(result);
         else resolve(null);
-      },10000)
+      },1000)
     });
     
     

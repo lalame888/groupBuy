@@ -1,21 +1,23 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CSSProperties } from "react";
+import { CSSProperties, forwardRef } from "react";
 
 interface IconButtonProps {
     icon: IconProp
     style?: CSSProperties
     onClick?(): void
-
 }
-export function IconButton(props: IconButtonProps){
+
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+    (props, ref) => {
     const style: CSSProperties = {
-        backgroundColor: 'transparent',border: 'none', padding: '5px',fontSize:'15px',marginLeft: '20px',
+        backgroundColor: 'transparent',border: 'none', padding: '5px',fontSize:'15px',
         ...props.style
     }
     return (
-        <button style={style} onClick={props.onClick}>
+        <button ref={ref} style={style} onClick={props.onClick}>
             <FontAwesomeIcon icon={props.icon}/>
         </button>
     )
-}
+
+})

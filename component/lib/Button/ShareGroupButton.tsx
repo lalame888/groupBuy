@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { MyHoverButton } from "./HoverButton";
 import { MyInput } from "../Input";
+import { THEME } from "@/styles/theme";
 
 export function ShareGroupButton(){
     const linkRef: React.RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
@@ -36,14 +37,14 @@ export function ShareGroupButton(){
                         <MyHoverButton onClick={()=>onCopy(`${location.href}`)} style={{display: 'inline-flex', padding: '5px 10px', marginLeft: '5px',fontSize:'12px'}}>複製</MyHoverButton>
                         </div>
                     </Popover.Body>
-                    </Popover>
+                </Popover>
             }
             trigger="click"
             rootClose={true}
             placement="bottom-end"
         >
-            <Button>
-                <FontAwesomeIcon icon={faShareNodes} style={{marginRight: '5px'}}/> 
+            <Button style={{borderRadius: THEME.buttonBorderRadius,fontSize: '16px'}}>
+                <FontAwesomeIcon icon={faShareNodes} style={{marginRight: '10px'}}/> 
                 邀請
             </Button>
         </OverlayTrigger>

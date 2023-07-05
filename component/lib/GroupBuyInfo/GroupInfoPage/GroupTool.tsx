@@ -2,8 +2,9 @@
 import { Confirm, IconButton, MyHoverButton, ShareGroupButton } from "@/component";
 import { GroupBuyStatus } from "@/interface";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import { useRef } from "react";
-import { OverlayTrigger, Popover, Dropdown } from "react-bootstrap";
+import { CSSProperties, useRef } from "react";
+import { Dropdown } from "react-bootstrap";
+import moduleStyles from './styles.module.css';
 
 /**
    * isOwner 是不是擁有者
@@ -53,8 +54,15 @@ export function GroupTool(props: GroupToolProps){
     const deleteGroupRef = useRef<HTMLButtonElement>(null);
     const openGroupEditRef = useRef<HTMLButtonElement>(null);
 
+    const buttonStyle: CSSProperties = {
+        marginRight: '20px',marginLeft: '5px'
+    }
+    const toggleStyle: CSSProperties = {
+        display: 'flex',
+        alignItems: 'center'
+    }
     return (
-        <div style={{display:'flex'}}>
+        <div style={{display:'flex',alignItems: 'center'}}>
             <ShareGroupButton/>
             {(props.isOwner) &&
                 <>
@@ -66,7 +74,7 @@ export function GroupTool(props: GroupToolProps){
                         團單將會轉為「結單中」狀態，其他人將無法新增訂單與編輯訂單。`}
                     >
                         <MyHoverButton
-                            style={{marginRight: '20px'}}
+                            style={buttonStyle}
                         >結算團單</MyHoverButton>
                     </Confirm>
                 }
@@ -76,36 +84,34 @@ export function GroupTool(props: GroupToolProps){
                         text={"確定完成此份團單嗎？\n團單將會轉為完成狀態。"}
                         onConfirm={()=>{props.changeStatus(GroupBuyStatus['已完成'])}}
                     >
-                        <MyHoverButton style={{marginRight: '15px'}}>完成團單</MyHoverButton>
+                        <MyHoverButton style={buttonStyle}>完成團單</MyHoverButton>
                     </Confirm>
                 }
-                    <OverlayTrigger 
-                        trigger="focus" 
-                        placement="bottom-end" 
-                        overlay={
-                            <Popover style={{fontSize: '16px',padding: '10px 5px'}}>
-                                { (props.isEditAble)&&
-                                    <Dropdown.Item onClick={props.toEditGroup}>
-                                        修改團單設定
-                                    </Dropdown.Item>
-                                }
-                                { (!props.isEditAble)&&
-                                    <Dropdown.Item>
-                                        恢復開放跟團
-                                    </Dropdown.Item>
-                                }
-                                <Dropdown.Item onClick={()=> {
-                                    if (deleteGroupRef?.current) {
-                                        deleteGroupRef.current.click();
-                                    }
-                                }}>
-                                    刪除團單
-                                </Dropdown.Item>
-                            </Popover>
+                 <Dropdown style={toggleStyle} >
+                    <Dropdown.Toggle as="span"  className={moduleStyles['custom-toggle']}>
+                        <IconButton icon={faEllipsisV} style={{fontSize: '20px'}} />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu style={{fontSize: '16px'}}>
+                        { (props.isEditAble)&&
+                            <Dropdown.Item onClick={props.toEditGroup}>
+                                修改團單設定
+                            </Dropdown.Item>
                         }
-                    >
-                        <IconButton icon={faEllipsisV} />
-                    </OverlayTrigger> 
+                        { (!props.isEditAble)&&
+                            <Dropdown.Item>
+                                恢復開放跟團
+                            </Dropdown.Item>
+                        }
+                        <Dropdown.Item onClick={()=> {
+                            if (deleteGroupRef?.current) {
+                                deleteGroupRef.current.click();
+                            }
+                        }}>
+                            刪除團單
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                 </Dropdown>
+                    
                     <div style={{display: 'none'}}>
                         {
                             // 必須另外用ref是因為如果Confirm綁在popover上，點下去之後整個原按鈕會消失=> 沒有render 

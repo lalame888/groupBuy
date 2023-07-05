@@ -1,8 +1,8 @@
 import { THEME } from "@/styles/theme";
 import Link from "next/link";
-import React, { CSSProperties, useRef } from "react"
+import React, { CSSProperties, forwardRef, useRef } from "react"
 import { Button } from "react-bootstrap";
-import styled, { ThemeProvider } from 'styled-components';
+import styled  from 'styled-components';
 
 interface HoverButtonProps {
     to?: string;
@@ -37,8 +37,8 @@ type HoverThemeType = CSSProperties & {hover: CSSProperties}
 type ThemeType = {
     green: HoverThemeType
 }
-export function MyHoverButton(props: HoverButtonProps): JSX.Element {
-    const ref= useRef<HTMLAnchorElement>(null);
+export const MyHoverButton =  forwardRef<HTMLSpanElement, HoverButtonProps>((props,ref)=> {
+    const linkRef= useRef<HTMLAnchorElement>(null);
     const themes:ThemeType = {
         green: {
             
@@ -59,8 +59,8 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
     const theme =(props.theme) ? themes[props.theme] :defaultTheme
    
     function onClick(event: React.MouseEvent<Element, MouseEvent>){
-        if (props.to && ref?.current) {
-            ref.current.click();
+        if (props.to && linkRef?.current) {
+            linkRef.current.click();
         }
         if (props.onClick) {
             props.onClick(event);
@@ -68,24 +68,22 @@ export function MyHoverButton(props: HoverButtonProps): JSX.Element {
     }
     
     return (
-        
-            <ThemeProvider theme={theme}>
-
-            <HoverButton 
-                 variant="light"
-                {...props}
-                theme={theme}
-                onClick={onClick}
-            >
-                {props.children}
-            </HoverButton>
-            <Link
-                style={{display: 'none'}}
-                href={props.to || ''}
-                ref={ref}
-            />
-            </ThemeProvider>
+            <>
+                <HoverButton 
+                    variant="light"
+                    {...props}
+                    theme={theme}
+                    onClick={onClick}
+                >
+                    {props.children}
+                </HoverButton>
+                <Link
+                    style={{display: 'none'}}
+                    href={props.to || ''}
+                    ref={linkRef}
+                />
+            </>
 
     )
 
-}
+})

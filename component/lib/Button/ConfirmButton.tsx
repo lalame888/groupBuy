@@ -1,16 +1,14 @@
-import React, {  useState } from "react"
+import React, {  forwardRef, useState } from "react"
 import { Button, Modal } from "react-bootstrap";
 
 interface ConfirmProps {
-    ref?: React.RefObject<HTMLSpanElement>
     onConfirm(): void
     children: JSX.Element,
     title?: string,
     text: string,
     confirmType?: 'delete'
 }
-
-export function Confirm(props:ConfirmProps): JSX.Element {
+export const Confirm = forwardRef<HTMLSpanElement, ConfirmProps>((props, ref)=>{
     const [show, setShow] = useState<boolean>(false);
     function open(){setShow(true)};
     function close(){setShow(false)};
@@ -39,11 +37,12 @@ export function Confirm(props:ConfirmProps): JSX.Element {
             </Modal.Footer>
             
         </Modal>
-        <span onClick={open} ref={props.ref} style={{display: 'contents'}}>
+        <span onClick={open} ref={ref} style={{display: 'contents'}}>
             {props.children}
         </span>
         
         </>
     )
-}
+
+})
 
