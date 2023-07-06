@@ -3,11 +3,11 @@ import { NO_IMAGE } from "@/data"
 import { StoreData } from "@/interface"
 import { CSSProperties} from "react"
 
-interface StoreImageProps {
+interface StoreCoverImageProps {
     store: StoreData | undefined
     width?: string
 }
-export function StoreImage(props: StoreImageProps){
+export function StoreCoverImage(props: StoreCoverImageProps){
     const imageDivStyle: CSSProperties = {
         maxWidth: props.width || '130px',
         margin: 'auto',

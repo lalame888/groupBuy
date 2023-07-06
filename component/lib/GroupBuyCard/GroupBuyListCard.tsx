@@ -1,5 +1,5 @@
 
-import { MyHoverButton, StoreImage } from "@/component"
+import { MyHoverButton, StoreCoverImage } from "@/component"
 import { GroupBuyObject } from "@/interface"
 import { THEME } from "@/styles/theme"
 import { CSSProperties } from "react"
@@ -51,7 +51,7 @@ export function GroupBuyListCard(props: GroupBuyListCardProps ){
        
         <div style={style}>
             <div style={{display: 'flex'}}>
-                <StoreImage
+                <StoreCoverImage
                     store={props.groupBuyObject.store}
                 />
                 <div style={infoDivStyle}>

@@ -1,7 +1,7 @@
 import { GroupBuyStatus, InfoPage } from "@/interface";
 import { GroupPageProps } from "../utils";
 import { GroupInfoDiv } from "./GroupInfoDiv";
-import { PageTitle } from "@/component";
+import { BackButton, PageTitle } from "@/component";
 import { GroupTool } from "./GroupTool";
 
 interface GroupInfoPageProps extends GroupPageProps {
@@ -23,6 +23,7 @@ export function GroupInfoPage(props: GroupInfoPageProps){
     
     return (
         <div>
+            <BackButton/>
             <PageTitle title={groupName}>
                 <> {!isEnd && 
                     <GroupTool
