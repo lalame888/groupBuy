@@ -1,5 +1,7 @@
 import '@/styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "cropperjs/dist/cropper.css";
+
 import { AppProps } from 'next/app';
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 

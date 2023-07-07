@@ -1,9 +1,9 @@
-import { StoreData, UserData } from "@/interface";
+import { StoreObject, UserData } from "@/interface";
 import { CSSProperties } from "react";
 import { StoreCoverImage, StoreMenuImage } from "../../Image";
 
 interface GroupInfoDivProps {
-    store: StoreData | undefined
+    store: StoreObject | undefined
     builder: UserData
     statusText: string
     endTimeString: string

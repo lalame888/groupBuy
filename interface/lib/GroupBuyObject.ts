@@ -1,8 +1,8 @@
 import { generateUUID, getKeyByValue, getTimeString } from "@/utils";
-import { Cloneable } from "./Cloneable";
 import { UserOrder } from "./Order";
 import { UserData } from "./UserInfo";
-import { StoreData } from "./Store";
+import { StoreObject } from "./Store";
+import { DataSetter } from "./DataSetter";
 
 export enum GroupBuyStatus {
     '開放跟團中', // 大家都可以編輯
@@ -28,23 +28,20 @@ type GroupBuyData = {
     statues: GroupBuyStatus
     deleteTime: string | undefined; // 被刪除or完成的時間 還沒完結undefined
     setting: GroupSetting,
-    store: StoreData| undefined; // 所選的店家
+    store: StoreObject| undefined; // 所選的店家
 }
 export type LoadGroupData = {
     data: GroupBuyData,
     builder: UserData,
     userOrder: Array<UserOrder>
 }
-type GroupBuyDataProperty = keyof GroupBuyData;
 
-export class GroupBuyObject extends Cloneable<GroupBuyObject> {
-    private data : GroupBuyData;
+export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
     private userOrder: Array<UserOrder> = []; //目前這個團單所有跟團者的訂單
     constructor(
         public readonly builder: UserData, // 開團者 
         data?: Partial<GroupBuyData>
     ){ 
-        super();
         const initSetting: GroupBuyData = {
             uid: generateUUID(),
             title: '',
@@ -64,7 +61,8 @@ export class GroupBuyObject extends Cloneable<GroupBuyObject> {
             store: undefined
 
         }
-        this.data = {...initSetting,...data };
+        super({...initSetting,...data });
+
     }
 
     static loadObject(prams: LoadGroupData): GroupBuyObject{
@@ -73,15 +71,13 @@ export class GroupBuyObject extends Cloneable<GroupBuyObject> {
             prams.data
         );
         result.userOrder = prams.userOrder;
+        // TODO: 如果是非團主&沒有觀看userOrder權限的，要另外處理
+        // TODO: 而且可以不用一開始就給，有點進去資料再看
+        // 跟團人數的資料要再另外給？
         return result;
     }
 
-    private dataSetter(key: GroupBuyDataProperty, value: any) {
-        const newData = {...this.data, [key]: value};
-        this.data = newData;
-    }
     // 定義setter 需要更新時使用dataSetter
-
     set title(title: string) {
         this.dataSetter('title', title);
     }
@@ -100,7 +96,7 @@ export class GroupBuyObject extends Cloneable<GroupBuyObject> {
                 break;
         }
     }
-    set store(store: StoreData | undefined) {
+    set store(store: StoreObject | undefined) {
         this.dataSetter('store',store);
     }
     set setting(setting: GroupSetting) {
@@ -108,15 +104,13 @@ export class GroupBuyObject extends Cloneable<GroupBuyObject> {
     }
 
     // 定義getter 
-    private dataGetter(key: GroupBuyDataProperty){
-        return this.data[key]
-    }
     get title(): string {return this.dataGetter('title') as string}
     get uid(): string {return this.dataGetter('uid') as string}
     get groupName(): string {
         const storeName = this.store? ` - ${this.store.name}` : '';
         return `${this.title}${storeName}`;
     }
+    get store(): StoreObject | undefined { return this.dataGetter('store') as StoreObject}
 
     // 和目前跟團團單有關的功能
 
@@ -133,7 +127,7 @@ export class GroupBuyObject extends Cloneable<GroupBuyObject> {
     get statusText(): string {
         return getKeyByValue(GroupBuyStatus, this.data.statues)
     }
-    get joinListLength(): number {
+    get joinListLength(): number { // TODO: 另外處理？
         return this.userOrder.length
     }
     get endTime(): Date|undefined {

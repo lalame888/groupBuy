@@ -1,23 +1,21 @@
 
-import { StoreData } from "@/interface";
+import { StoreObject } from "@/interface";
 import { CSSProperties, useState} from "react"
 import { Modal } from "react-bootstrap";
 import { MenuCanvas } from "./MenuCanvas";
 import styled from "styled-components";
 
 interface StoreMenuImageProps {
-    store: StoreData
+    store: StoreObject
 }
 
 const ImageDiv = styled.div`
         cursor: pointer;
         border: 1px solid transparent;
         max-width: 130px;
-        margin: auto;
+        height: fit-content;
         display: inline-flex;
         padding: 5px;
-        padding-bottom: 16px;
-
         &:hover{
             border: 1px solid gray;
         }

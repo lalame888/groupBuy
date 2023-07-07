@@ -7,6 +7,8 @@ interface MenuCanvasProps {
     menuImage: Array<string>
     style?: CSSProperties
 }
+
+// TODO: 尺寸很奇怪
 export function MenuCanvas(props: MenuCanvasProps){
     const [index, setIndex] = useState<number>(0);
     useEffect(()=>{ // 更變了資料之後改成回到第一頁
@@ -48,11 +50,11 @@ export function MenuCanvas(props: MenuCanvasProps){
 	},[props.menuImage,index])
 
     return(
-        <div style={{width: '80%',...props.style}}>
+        <div style={{maxWidth: '80%',maxHeight: '80vh', ...props.style}}>
             {
                 (hasPagination) &&
                 <div style={{display: 'flex', justifyContent: 'flex-end',alignItems:'center'}}>
-                    <span style={{fontSize: '18px', margin:'10px'}}>第 {index+1} 頁 / 共 {props.menuImage.length} 頁</span>
+                    <span style={{fontSize: '18px', marginBottom:'10px'}}>第 {index+1} 頁 / 共 {props.menuImage.length} 頁</span>
                 </div>
             }
             <div style={{display: 'flex',position: 'relative'}}>
