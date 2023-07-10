@@ -1,10 +1,19 @@
-import { GroupBuyObject, GroupBuyStatus, LoadGroupData, StoreObject, UserInfo } from "@/interface";
+import { GroupBuyObject, GroupBuyStatus, LoadGroupData, StoreData, StoreObject, UserInfo } from "@/interface";
 
 export const myUser: UserInfo = new UserInfo('韻儒','lalame888');
 myUser.favoriteStoreUidList = [];
-export const anotherUser: UserInfo = new UserInfo('使用者A','groupbuy123');
+export const anotherUser: UserInfo = new UserInfo('使用者A','groupBuy123');
 
-export const store1: StoreObject = new StoreObject('嘉義涼麵','../assets/S__113475591.jpg','0987654321',['../assets/S__113475591.jpg','../assets/S__113475595.jpg']);
+const coverImage = '../assets/S__113475591.jpg';
+const menuImage = '../assets/S__113475595.jpg';
+const storeData1: Partial<StoreData> =  {
+    name: '嘉義涼麵',
+    phone:'0987654321', 
+    address: '台中',
+    coverImage: coverImage,
+    menuImage: [coverImage,menuImage]
+}
+export const store1: StoreObject = new StoreObject(storeData1);
 
 export const groupBuyData1: LoadGroupData = {
     data:{
@@ -23,7 +32,8 @@ export const groupBuyData1: LoadGroupData = {
                 value: 0
             }
         },
-        store: store1
+        store: store1,
+        joinCount: 0
     },
     builder:myUser.userData,
     userOrder:[]

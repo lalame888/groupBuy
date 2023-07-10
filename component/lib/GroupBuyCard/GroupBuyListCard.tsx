@@ -43,10 +43,7 @@ export function GroupBuyListCard(props: GroupBuyListCardProps ){
     const buttonStyle: CSSProperties = {
         margin: '8px 0px'
     }
-        // TODO 截止之後還要有讓人家更動每個人狀態的(繳錢)
-        // TODO 還有匯出團單
    
-    // TODO 看要不要跟歷史直接整個分開 這邊好亂
     return(
        
         <div style={style}>
@@ -57,7 +54,7 @@ export function GroupBuyListCard(props: GroupBuyListCardProps ){
                 <div style={infoDivStyle}>
                     <p style={titleStyle}>{props.groupBuyObject.groupName}</p>
                     <p style={infoStyle}>開團人：{props.groupBuyObject.builder.userName}</p>
-                    <p style={infoStyle}>參團人數：{props.groupBuyObject.joinListLength}</p>
+                    <p style={infoStyle}>參團人數：{props.groupBuyObject.joinListCount}</p>
                     <p style={infoStyle}>團單狀態：{props.groupBuyObject.statusText}</p>
                     <p style={infoStyle}>{props.groupBuyObject.endTimeString}</p>
 

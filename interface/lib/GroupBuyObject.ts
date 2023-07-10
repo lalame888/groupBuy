@@ -29,15 +29,16 @@ type GroupBuyData = {
     deleteTime: string | undefined; // 被刪除or完成的時間 還沒完結undefined
     setting: GroupSetting,
     store: StoreObject| undefined; // 所選的店家
+    joinCount: number // 參團人數 => 由後端給的，如果沒有userOrder就以此數量當參團人數
 }
 export type LoadGroupData = {
     data: GroupBuyData,
     builder: UserData,
-    userOrder: Array<UserOrder>
+    userOrder: Array<UserOrder> | undefined
 }
 
 export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
-    private userOrder: Array<UserOrder> = []; //目前這個團單所有跟團者的訂單
+    private userOrder: Array<UserOrder> | undefined = undefined ; //目前這個團單所有跟團者的訂單
     constructor(
         public readonly builder: UserData, // 開團者 
         data?: Partial<GroupBuyData>
@@ -57,9 +58,10 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
                     type: 'every',
                     value: 0
                 }
+               
             },
-            store: undefined
-
+            store: undefined,
+            joinCount: 0
         }
         super({...initSetting,...data });
 
@@ -73,9 +75,9 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
         result.userOrder = prams.userOrder;
         // TODO: 如果是非團主&沒有觀看userOrder權限的，要另外處理
         // TODO: 而且可以不用一開始就給，有點進去資料再看
-        // 跟團人數的資料要再另外給？
         return result;
     }
+    
 
     // 定義setter 需要更新時使用dataSetter
     set title(title: string) {
@@ -127,8 +129,8 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
     get statusText(): string {
         return getKeyByValue(GroupBuyStatus, this.data.statues)
     }
-    get joinListLength(): number { // TODO: 另外處理？
-        return this.userOrder.length
+    get joinListCount(): number { 
+        return (this.userOrder) ? this.userOrder.length : this.data.joinCount
     }
     get endTime(): Date|undefined {
         const time =  (this.data.deleteTime ) ? this.data.deleteTime : this.data.setting.endTime

@@ -8,7 +8,7 @@ interface MenuCanvasProps {
     style?: CSSProperties
 }
 
-// TODO: 尺寸很奇怪
+// TODO: 尺寸很奇怪，希望寬高都限制在螢幕畫面中不要滾輪
 export function MenuCanvas(props: MenuCanvasProps){
     const [index, setIndex] = useState<number>(0);
     useEffect(()=>{ // 更變了資料之後改成回到第一頁
@@ -30,7 +30,7 @@ export function MenuCanvas(props: MenuCanvasProps){
     function quickKey(this: Window,event: KeyboardEvent): void {
         const keyCode: string = event.code;
         const target: any = event.target;
-        if (target.classList.contains('modal') === false &&  // 不是正在操作moal的時候
+        if (target.classList.contains('modal') === false &&  // 不是正在操作modal的時候
            ( ['INPUT','SELECT','TEXTAREA'].indexOf(target.tagName) === -1  )  // 當目前target（非input、select） 
         ) {
             if (keyCode === 'ArrowRight') {  // 方向鍵往右 : 切下一頁
@@ -50,7 +50,7 @@ export function MenuCanvas(props: MenuCanvasProps){
 	},[props.menuImage,index])
 
     return(
-        <div style={{maxWidth: '80%',maxHeight: '80vh', ...props.style}}>
+        <div style={{maxWidth: '90%',maxHeight: '80vh', ...props.style}}>
             {
                 (hasPagination) &&
                 <div style={{display: 'flex', justifyContent: 'flex-end',alignItems:'center'}}>

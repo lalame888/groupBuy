@@ -35,7 +35,9 @@ export class ServerUtils {
 
     let result: Array<GroupBuyObject> = [];
     if (type === 'now') {
-      const groupBuyObject1 = GroupBuyObject.loadObject(groupBuyData1)
+      const groupBuyObject1 = GroupBuyObject.loadObject(groupBuyData1) 
+      // TODO: 後端根據是不是有權限觀看來決定userOrder的資料內容 (陣列or undefined)
+      
       result = [groupBuyObject1, groupBuyObject2.clone()];
     } else {
 
@@ -44,6 +46,8 @@ export class ServerUtils {
   }
 
   public async loadGroupBuy(groupId: string):Promise<GroupBuyObject | null> {
+    // TODO: 這裡載入的時候，userOrder就要包含在裡面
+    
     return new Promise(async (resolve)=>{
       const nowList = await this.loadUserGroupBuyList('now');
       const hisList = await this.loadUserGroupBuyList('history');
@@ -53,8 +57,6 @@ export class ServerUtils {
         else resolve(null);
       },1000)
     });
-    
-    
   }
 
   public updateGroupState(groupId: string, type: GroupBuyStatus): Promise<string>{

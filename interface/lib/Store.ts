@@ -1,5 +1,6 @@
 import { changeWeekToCh, generateUUID } from "@/utils"
 import { DataSetter } from "./DataSetter"
+import { MenuData } from "./Menu"
 
 export type WeekDay = 1|2|3|4|5|6|7
 export type BusinessHours = {
@@ -10,13 +11,13 @@ export type BusinessHours = {
 // TODO: 要想一下讓使用者修改菜單的問題
 // 店家資訊先不公開共享 => 公開共享時維護很麻煩 應該要有權限管理等等，但如果真的要給大眾使用，有共享才比較符合成本
 
-type StoreData = {
+export type StoreData = {
     uid: string
     name: string  // 店家名稱
     phone: string|'', //店家電話
     address: string|'', // 店家地址
     coverImage: string   // 店家封面
-    menuImage: Array<string> // 店家菜單，可以多張
+    menuImage: Array<string>  // 店家菜單，可以多張
     businessHours: Array<BusinessHours> // 營業時間
     menuData: Array<MenuData> | undefined // 菜單資訊 (一開始有可能不拿)
 }
@@ -87,9 +88,5 @@ export class StoreObject extends DataSetter<StoreObject,StoreData > {
     }
 
     
-    // TODO 建立像GroupBuyObject 的結構
 }
 
-type MenuData = {
-    // TODO
-}

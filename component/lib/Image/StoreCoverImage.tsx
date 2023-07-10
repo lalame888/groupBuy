@@ -21,7 +21,7 @@ export function StoreCoverImage(props: StoreCoverImageProps){
         <div style={imageDivStyle}>
             <img
                 style={imageStyle}
-                src={ props.store?.storeImage || NO_IMAGE.src }
+                src={ props.store?.coverImage || NO_IMAGE.src }
                 alt={props.store?.name || '未選擇店家'}
             />
         </div>  

@@ -14,7 +14,7 @@ export function GroupInfoPage(props: GroupInfoPageProps){
         builder, 
         statusText, 
         endTimeString, 
-        joinListLength,
+        joinListCount,
         groupName,
         isEnd,
         isEditAble,
@@ -40,12 +40,14 @@ export function GroupInfoPage(props: GroupInfoPageProps){
                 builder={builder}
                 statusText={statusText}
                 endTimeString={endTimeString}
-                joinListLength={joinListLength}
+                joinListCount={joinListCount}
             />
 
         </div>
     )
 }
+// TODO 截止之後還要有讓人家更動每個人狀態的(繳錢)
+// TODO 還有匯出團單
 
 /** Info有幾個狀況組合
  * 

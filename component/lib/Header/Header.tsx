@@ -15,7 +15,7 @@ export function Header() {
     const appName = `輕鬆開好團`;
     const router = useRouter();
     const path = router.pathname.split('/')[1];
-    const loginUrl = '../login'; // TODO: 登入
+    const loginUrl = '../login'; // TODO: 登入頁面
     const style: CSSProperties = {
         color: '#ddd',
         backgroundColor: '#7acac5',
@@ -35,7 +35,7 @@ export function Header() {
         marginRight: '70px'
     }
 
-    const toggleBottonStyle: CSSProperties = {
+    const toggleButtonStyle: CSSProperties = {
         fontSize: '15px'
     }
 
@@ -62,7 +62,7 @@ export function Header() {
             <Container>
                 <Navbar variant="light" expand="md" >
                     <Navbar.Brand style={appNameStyle}>{appName}</Navbar.Brand> 
-                    <Navbar.Toggle aria-controls="navbarScroll" style={toggleBottonStyle}/>
+                    <Navbar.Toggle aria-controls="navbarScroll" style={toggleButtonStyle}/>
                     <Navbar.Collapse  id="navbarScroll" style={{justifyContent: 'space-between',backgroundColor: '#7acac5'}}>
                         <Nav>
                             {
