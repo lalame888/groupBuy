@@ -28,18 +28,24 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
 
     }
 
-    static loadUserOrder(data: UserOrderData, orderList: Array<GoodsData>): UserOrder {
-        const orders = orderList.map((order)=> {
-            const { name, money, number, note, appendTermList } = order; // 把物件變成class
-            return new GoodsData(name, money, number, note, appendTermList);
-        })
-        return new UserOrder(
-            data.user,
-            {...data,orderList: orders}
-        )
-    }
-
-
+  static loadUserOrder(data: UserOrderData, orderList: Array<GoodsData>): UserOrder {
+      const orders = orderList.map((order)=> {
+          const { name, money, number, note, appendTermList } = order; // 把物件變成class
+          return new GoodsData(name, money, number, note, appendTermList);
+      })
+      return new UserOrder(
+          data.user,
+          {...data,orderList: orders}
+      )
+  }
+  get orderList(): Array<GoodsData>{
+    return this.dataGetter('orderList') as  Array<GoodsData>;
+  }
+  get user(): UserData {return this.dataGetter('user') as UserData}
+  get uid(): string {return this.dataGetter('uid') as string}
+  get appendMoney(): number {return this.dataGetter('appendMoney') as number}
+  get orderNote(): string {return this.dataGetter('orderNote') as string}
+  get payMoney(): number {return this.dataGetter('payMoney') as number}
   get totalMoney(): number {  // 回傳總金額
     let result: number = this.data.appendMoney;
     if (this.data.orderList.length === 0) return 0;
@@ -52,7 +58,6 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
     if (this.data.orderList.length ===0) return '尚無內容'
     return this.data.orderList.map((order)=> order.orderContainText).join('、')
   }
-
   get payStatus(): string {
     if (this.data.payMoney === this.totalMoney) return `已付款完成${this.data.receipt ? '，已簽收': '尚未簽收'}`;
     if (this.data.payMoney > this.totalMoney) return `已付款完成，尚需找 ${this.data.payMoney - this.totalMoney}元`;
@@ -60,6 +65,7 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
     else return `已支付${this.data.payMoney}元，尚需補${this.totalMoney - this.data.payMoney}元`
           
   }
+  
 
 
 

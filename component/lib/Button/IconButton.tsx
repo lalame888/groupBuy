@@ -6,6 +6,7 @@ interface IconButtonProps {
     icon: IconProp
     style?: CSSProperties
     onClick?(): void
+    disabled?: boolean
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
@@ -15,7 +16,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         ...props.style
     }
     return (
-        <button ref={ref} style={style} onClick={props.onClick}>
+        <button ref={ref} style={style} onClick={props.onClick} disabled={props.disabled}>
             <FontAwesomeIcon icon={props.icon}/>
         </button>
     )

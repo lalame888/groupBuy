@@ -7,6 +7,7 @@ interface ConfirmProps {
     title?: string,
     text: string,
     confirmType?: 'delete'
+    disabled?: boolean
 }
 export const Confirm = forwardRef<HTMLSpanElement, ConfirmProps>((props, ref)=>{
     const [show, setShow] = useState<boolean>(false);
@@ -29,6 +30,7 @@ export const Confirm = forwardRef<HTMLSpanElement, ConfirmProps>((props, ref)=>{
             <Modal.Footer>
                 <Button variant="light" onClick={close}>返回</Button>
                 <Button 
+                    disabled={props.disabled}
                     variant={props.confirmType === 'delete'? 'danger':"success"} 
                     onClick={()=>{props.onConfirm(); close()}}
                 >

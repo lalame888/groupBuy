@@ -38,5 +38,7 @@ export const groupBuyData1: LoadGroupData = {
     builder:myUser.userData,
     userOrder:[]
 }
+export const groupBuyObject1 = GroupBuyObject.loadObject(groupBuyData1) 
+
 
 export const groupBuyObject2 = new GroupBuyObject(anotherUser.userData,{title: '團購2'});

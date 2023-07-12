@@ -49,6 +49,7 @@ interface GroupToolProps  {
     endTime: Date | undefined
     changeStatus(newStatus: GroupBuyStatus): void
     toEditGroup(): void
+    loadingLock: boolean
 }
 export function GroupTool(props: GroupToolProps){
     const deleteGroupRef = useRef<HTMLButtonElement>(null);
@@ -61,6 +62,9 @@ export function GroupTool(props: GroupToolProps){
         display: 'flex',
         alignItems: 'center'
     }
+    function changeStatus(newStatus:GroupBuyStatus ){
+        if (!props.loadingLock) props.changeStatus(newStatus)
+    }
     return (
         <div style={{display:'flex',alignItems: 'center'}}>
             <ShareGroupButton/>
@@ -68,45 +72,51 @@ export function GroupTool(props: GroupToolProps){
                 <>
                 { (props.isEditAble) &&
                     <Confirm 
-                        onConfirm={()=>{props.changeStatus(GroupBuyStatus['結單中'])}}
+                        disabled={props.loadingLock}
+                        onConfirm={()=>{changeStatus(GroupBuyStatus['結單中'])}}
                         title={'結算團單'}
                         text={`確定要${props.endTime ? '提前':''}結算此份團單嗎？\n
                         團單將會轉為「結單中」狀態，其他人將無法新增訂單與編輯訂單。`}
                     >
                         <MyHoverButton
                             style={buttonStyle}
+                            disabled={props.loadingLock}
                         >結算團單</MyHoverButton>
                     </Confirm>
                 }
                 { (!props.isEditAble) &&
                     <Confirm
+                        disabled={props.loadingLock}
                         title="完成團單"
                         text={"確定完成此份團單嗎？\n團單將會轉為完成狀態。"}
-                        onConfirm={()=>{props.changeStatus(GroupBuyStatus['已完成'])}}
+                        onConfirm={()=>{changeStatus(GroupBuyStatus['已完成'])}}
                     >
-                        <MyHoverButton style={buttonStyle}>完成團單</MyHoverButton>
+                        <MyHoverButton style={buttonStyle} disabled={props.loadingLock}>完成團單</MyHoverButton>
                     </Confirm>
                 }
                  <Dropdown style={toggleStyle} >
                     <Dropdown.Toggle as="span"  className={moduleStyles['custom-toggle']}>
-                        <IconButton icon={faEllipsisV} style={{fontSize: '20px'}} />
+                        <IconButton icon={faEllipsisV} style={{fontSize: '20px'}}  disabled={props.loadingLock} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu style={{fontSize: '16px'}}>
                         { (props.isEditAble)&&
-                            <Dropdown.Item onClick={props.toEditGroup}>
+                            <Dropdown.Item onClick={props.toEditGroup}  disabled={props.loadingLock}>
                                 修改團單設定
                             </Dropdown.Item>
                         }
                         { (!props.isEditAble)&&
-                            <Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{changeStatus(GroupBuyStatus['開放跟團中'])}}>
                                 恢復開放跟團
                             </Dropdown.Item>
                         }
-                        <Dropdown.Item onClick={()=> {
-                            if (deleteGroupRef?.current) {
-                                deleteGroupRef.current.click();
-                            }
-                        }}>
+                        <Dropdown.Item 
+                            disabled={props.loadingLock}
+                            onClick={()=> {
+                                if (deleteGroupRef?.current) {
+                                    deleteGroupRef.current.click();
+                                }    
+                            }}
+                        >
                             刪除團單
                         </Dropdown.Item>
                     </Dropdown.Menu>
@@ -117,7 +127,8 @@ export function GroupTool(props: GroupToolProps){
                             // 必須另外用ref是因為如果Confirm綁在popover上，點下去之後整個原按鈕會消失=> 沒有render 
                         }
                         <Confirm 
-                            onConfirm={()=>{props.changeStatus(GroupBuyStatus['已取消團單'])}}
+                            disabled={props.loadingLock}
+                            onConfirm={()=>{changeStatus(GroupBuyStatus['已取消團單'])}}
                             title={'刪除團單'}
                             text={'確定要作廢此份團單嗎？\n團單將會轉為取消狀態。'}
                             confirmType="delete"
@@ -125,8 +136,9 @@ export function GroupTool(props: GroupToolProps){
                         >
                             <span></span>
                         </Confirm>
-                        <Confirm 
-                            onConfirm={()=>{props.changeStatus(GroupBuyStatus['開放跟團中'])}}
+                        <Confirm
+                            disabled={props.loadingLock} 
+                            onConfirm={()=>{changeStatus(GroupBuyStatus['開放跟團中'])}}
                             title={'重新開放跟團'}
                             text={`確定要重新開放跟團嗎？\n
                              團單將會轉為「開放跟團中」狀態，其他人將可以新增訂單與編輯訂單。`}

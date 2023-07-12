@@ -1,8 +1,8 @@
 
 
-import { ErrorCode, GroupBuyObject, GroupBuyStatus, LoggingLevel, UserInfo } from '@/interface';
+import { ErrorCode, GroupBuyObject, GroupBuyStatus, LoggingLevel, UserInfo, UserOrder } from '@/interface';
 import axios, { AxiosInstance, AxiosResponse, CancelTokenSource } from 'axios';
-import { groupBuyData1, groupBuyObject2, myUser } from './FakeData';
+import { groupBuyData1, groupBuyObject1, groupBuyObject2, myUser } from './FakeData';
 import { getTimeString } from '@/utils';
 
 export class ServerUtils {
@@ -35,10 +35,9 @@ export class ServerUtils {
 
     let result: Array<GroupBuyObject> = [];
     if (type === 'now') {
-      const groupBuyObject1 = GroupBuyObject.loadObject(groupBuyData1) 
       // TODO: 後端根據是不是有權限觀看來決定userOrder的資料內容 (陣列or undefined)
       
-      result = [groupBuyObject1, groupBuyObject2.clone()];
+      result = [groupBuyObject1, groupBuyObject2];
     } else {
 
     }
@@ -57,6 +56,18 @@ export class ServerUtils {
         else resolve(null);
       },1000)
     });
+  }
+
+  public async deleteOrder(groupId: string, order: UserOrder): Promise<void> {
+   const groupObject = await this.loadGroupBuy(groupId);
+   if (groupObject?.userOrderList) {
+    const index = groupObject.userOrderList.findIndex((o)=> o.uid === order.uid)
+    if (index !== -1) {
+      const newList = [...groupObject.userOrderList ];
+      newList.splice(index,1);
+      groupObject.userOrderList = newList
+    }
+   }
   }
 
   public updateGroupState(groupId: string, type: GroupBuyStatus): Promise<string>{

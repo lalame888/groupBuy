@@ -1,12 +1,17 @@
-import { GroupBuyStatus, InfoPage } from "@/interface";
+import { GroupBuyStatus, InfoPage, UserOrder } from "@/interface";
 import { GroupPageProps } from "../utils";
 import { GroupInfoDiv } from "./GroupInfoDiv";
-import { BackButton, PageTitle } from "@/component";
+import { BackButton, MyHoverButton, PageTitle } from "@/component";
 import { GroupTool } from "./GroupTool";
+import { THEME } from "@/styles/theme";
+import { MyOrderInfo } from "./MyOrderInfo";
+import { OrderListView } from "./OrderListView/OrderListView";
 
 interface GroupInfoPageProps extends GroupPageProps {
-    updatePayState(): void // 更動繳費或取貨狀態
+    updatePayState(updateList: Array<UserOrder>): void // 更動繳費或取貨狀態
     updateGroupState(type:GroupBuyStatus): void
+    deleteMyOrder(): void;
+    myOrder: UserOrder | undefined
 }
 export function GroupInfoPage(props: GroupInfoPageProps){
     const {
@@ -18,8 +23,11 @@ export function GroupInfoPage(props: GroupInfoPageProps){
         groupName,
         isEnd,
         isEditAble,
-        endTime
+        endTime,
+        setting,
+        userOrderList
     } = props.groupBuyObject
+    const isOwner = builder.loginId === props.userInfo?.loginId;
     
     return (
         <div>
@@ -27,6 +35,7 @@ export function GroupInfoPage(props: GroupInfoPageProps){
             <PageTitle title={groupName}>
                 <> {!isEnd && 
                     <GroupTool
+                        loadingLock={props.loadingLock}
                         isOwner={builder.loginId === props.userInfo?.loginId}
                         isEditAble={isEditAble}
                         endTime={endTime}
@@ -43,6 +52,46 @@ export function GroupInfoPage(props: GroupInfoPageProps){
                 joinListCount={joinListCount}
             />
 
+            {(props.myOrder !== undefined && props.myOrder.orderList.length>0) ?
+                    <MyOrderInfo
+                        orderInfo={props.myOrder}
+                        isEditable={isEditAble}
+                        loadingLock={props.loadingLock}
+                        onDeleteOrder={props.deleteMyOrder}
+                        toEditOrder={()=>props.setPageName(InfoPage['編輯訂單'])}
+                    />:
+                    (props.userInfo && isEditAble) ?
+                    <MyHoverButton 
+                        style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
+                        onClick={()=>{props.setPageName(InfoPage['編輯訂單'])}}
+                    >
+                        <div style={{marginTop: '1rem'}}>
+                            <p>你還沒有填寫任何訂單！</p>
+                            <p>點選此區塊以新增訂單資訊</p>
+                        </div>
+                        
+                    </MyHoverButton> 
+                    :
+                    (isEditAble) &&
+                    <MyHoverButton 
+                    // TODO: 導向登入/ 訪客登記
+                        style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
+                        to={`./login`}
+                    >
+                        <div style={{marginTop: '1rem'}}>
+                            <p>登入後才可新增訂單</p>
+                            <p>點選此區塊以登入帳號</p>
+                        </div>
+                    </MyHoverButton>
+            }
+            {
+                (setting.openOrderView || isOwner) && (userOrderList) &&
+                 <OrderListView
+                    updatePayState={props.updatePayState}
+                    groupName={groupName}
+                    orderList={userOrderList}
+                 />
+            }
         </div>
     )
 }

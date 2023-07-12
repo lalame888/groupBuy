@@ -66,7 +66,6 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
         super({...initSetting,...data });
 
     }
-
     static loadObject(prams: LoadGroupData): GroupBuyObject{
         const result = new GroupBuyObject(
             prams.builder,
@@ -77,8 +76,6 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
         // TODO: 而且可以不用一開始就給，有點進去資料再看
         return result;
     }
-    
-
     // 定義setter 需要更新時使用dataSetter
     set title(title: string) {
         this.dataSetter('title', title);
@@ -104,6 +101,9 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
     set setting(setting: GroupSetting) {
         this.dataSetter('setting',{...setting})
     }
+    set userOrderList(list: Array<UserOrder> ) {
+        this.userOrder = list;
+    }
 
     // 定義getter 
     get title(): string {return this.dataGetter('title') as string}
@@ -113,7 +113,8 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
         return `${this.title}${storeName}`;
     }
     get store(): StoreObject | undefined { return this.dataGetter('store') as StoreObject}
-
+    get userOrderList(): Array<UserOrder> | undefined {return this.userOrder}
+    get setting(): GroupSetting{return this.dataGetter('setting') as GroupSetting}
     // 和目前跟團團單有關的功能
 
 
