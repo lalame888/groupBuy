@@ -27,9 +27,10 @@ export function OrderListView(props: OrderListViewProps){
     return(
        
         <div style={{marginTop: '30px',marginBottom: '60px'}}> 
+        
             <p style={{fontSize:'18px',display: 'flex', alignItems: 'center',justifyContent: 'space-between'}}>
                 
-                <span>所有人的團單</span>
+                <span style={{fontSize: '24px'}}>所有人的團單</span>
                 {
                     (props.orderList.length>0) &&  
                     <span style={{marginLeft: '20px',display: 'flex',wordBreak: 'keep-all',alignItems:'center',fontSize: '1rem'}}>

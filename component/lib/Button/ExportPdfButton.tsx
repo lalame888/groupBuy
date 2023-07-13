@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import autoTable from 'jspdf-autotable'
 import React, { CSSProperties } from "react"
 import { Button } from "react-bootstrap";
-import  './msjh-normal.js'
+// import  './msjh-normal.js' // TODO：不引用會有亂碼，引用之後每次載入頁面都要重新下載
 
 interface ExportPdfButtonProps {
    style?: CSSProperties;

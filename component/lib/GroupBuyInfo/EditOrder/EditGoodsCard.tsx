@@ -123,6 +123,7 @@ export function EditGoodsCard(props: EditGoodsCardProps){
                 <p style={cardRowStyle}>
                     <span style={cardRowStyle}>數量：
                     <FormControl 
+                        size="sm"
                         disabled={!(props.goods?.name)}
                         value={orderNumber} 
                         type={"number"}
@@ -133,6 +134,7 @@ export function EditGoodsCard(props: EditGoodsCardProps){
                     <span style={{...cardRowStyle,marginLeft: '10px'}}>
                         單價：
                         <FormControl 
+                            size="sm"
                             disabled={!(props.goods?.name)}
                             value={money} 
                             type={"number"}
@@ -142,7 +144,9 @@ export function EditGoodsCard(props: EditGoodsCardProps){
                     </span>
                 </p>
                 <p style={cardRowStyle}>金額：
-                    <FormControl    
+                    <FormControl
+                        disabled
+                        size="sm"    
                         type="number"
                         value={(parseInt(money) * parseInt(orderNumber)).toString()}
                         readOnly={true }
@@ -203,6 +207,7 @@ export function EditGoodsCard(props: EditGoodsCardProps){
                     props.setting.addNote && 
                     <p style={cardRowStyle}>備註：
                         <FormControl 
+                            size="sm"
                             disabled={!(props.goods.name)}
                             value={note}
                             onChange={(event)=>setNote(event.target.value)}

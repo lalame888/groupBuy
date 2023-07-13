@@ -20,6 +20,7 @@ const HoverButton = styled(Button)`
   font-size: 16px;
   border-radius: 25px;
   color: black;
+  justify-content: center;
   padding: 6px ${(props) => (props.size === 'long' ? '40px' : '20px')};
   border: ${(props) => props.theme.border};
   background-color: ${(props) => props.theme.backgroundColor};
@@ -58,7 +59,7 @@ export const MyHoverButton =  forwardRef<HTMLSpanElement, HoverButtonProps>((pro
         }
     }
     const defaultTheme: HoverThemeType = {
-        border: '',
+        border: '1px solid black',
         backgroundColor: 'white',
         hover: {
             backgroundColor: THEME.lightGreenColor

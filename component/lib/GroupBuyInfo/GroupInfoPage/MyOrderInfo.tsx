@@ -44,6 +44,7 @@ export function MyOrderInfo(props: MyOrderInfoProps){
                         <MyHoverButton
                             theme="green"
                             onClick={props.toEditOrder}
+                            style={{marginRight: '10px'}}
                         >
                             修改訂單
                         </MyHoverButton>

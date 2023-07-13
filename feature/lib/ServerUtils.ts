@@ -6,11 +6,12 @@ import { groupBuyData1, groupBuyObject1, groupBuyObject2, myUser } from './FakeD
 import { getTimeString } from '@/utils';
 
 export class ServerUtils {
+  private JWT: string | null = '';
   constructor(
       public apiUrl = './api/',
-      private JWT = localStorage.getItem('token')  // TODO: 不要把jwt放在 localStorage
+      
   ) {
-    
+   // this.JWT = localStorage.getItem('token')  // TODO: 不要把jwt放在 localStorage;
   }
   private get axios(): AxiosInstance {
     return (axios.create({
@@ -53,7 +54,7 @@ export class ServerUtils {
       const hisList = await this.loadUserGroupBuyList('history');
       const result = [...nowList,...hisList].find((g)=>g.uid === groupId);
       setTimeout(()=>{
-        if (result) resolve(result.clone());
+        if (result) resolve(result);
         else resolve(null);
       },1000)
     });
@@ -72,9 +73,9 @@ export class ServerUtils {
   }
   public async saveOrder(groupId: string,newOrder: UserOrder): Promise<void> {
     const groupObject = await this.loadGroupBuy(groupId);
-    if (groupObject?.userOrderList) {
-      const newList = [...groupObject.userOrderList ];
-      const index = groupObject.userOrderList.findIndex((o)=> o.uid === newOrder.uid)
+    if (groupObject) {
+      const newList = (groupObject.userOrderList)?[...groupObject.userOrderList ]: [];
+      const index = newList.findIndex((o)=> o.uid === newOrder.uid)
       if (index !== -1) {
         newList[index] = newOrder;
       } else {

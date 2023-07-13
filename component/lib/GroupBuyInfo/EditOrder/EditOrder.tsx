@@ -33,6 +33,7 @@ export function EditOrder(props: EditOrderProps){
         if (!props.loadingLock) {
             const newOrder = order.clone();
             newOrder.orderNote = orderNote;
+            
             props.saveOrder(newOrder);
         }
     }
@@ -77,7 +78,7 @@ export function EditOrder(props: EditOrderProps){
                 <div style={{backgroundColor: '#489A81',display: 'flex', justifyContent: 'center', color: 'white',height: '40px',fontSize: '20px',alignItems: 'center'}}>
                     <span style={{letterSpacing: '30px',marginLeft: '30px'}}>訂單內容</span>
                 </div>
-                <div style={{padding: '30px 20px'}}>
+                <div style={{padding: '30px 20px', fontSize: '16px'}}>
                     <div style={{height: 'calc(100vh - 500px)', boxShadow: 'inset 0px 0px 3px 1px #80808042',overflow: 'auto'}}>
                         {myOrder.orderList.map((goods,index)=>{
                             return(
@@ -124,7 +125,7 @@ export function EditOrder(props: EditOrderProps){
                         <MyHoverButton
                             theme="green"
                             disabled={props.loadingLock}
-                            style={{marginTop: '10px'}}
+                            style={{marginTop: '10px', fontSize: '20px', width: '100%'}}
                             onClick={()=>{ saveOrder(myOrder, orderNote)}}
                         >
                             確定儲存

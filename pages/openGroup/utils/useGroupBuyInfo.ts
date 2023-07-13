@@ -62,7 +62,9 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
                 setErrorMessage('');
                 const group = await serverUtils.loadGroupBuy(groupId);
                 if (mounted.current) {
-                    setGroupBuyObject(group);
+                    setGroupBuyObject(group?.clone());
+                    console.log(group)
+
                 }
             }
         } catch (error) {
@@ -129,6 +131,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
     const saveOrder = useCallback(async (newOrder: UserOrder) =>{
         setLoadingLock(true);
         try {
+            console.log(newOrder)
             await serverUtils.saveOrder(groupId,newOrder);
             // 最後要儲存的時候，再看使用者送出的Order裡面有哪些商品是原本沒有的 & 看設定是可不可以更改的
             try {
