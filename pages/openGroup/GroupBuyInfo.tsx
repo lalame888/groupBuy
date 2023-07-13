@@ -37,7 +37,11 @@ export default function GroupBuyInfo(){
             {(pageName === InfoPage['編輯團單'] && props.userInfo) && 
                 <EditGroup {...props} />}
             {(pageName === InfoPage['編輯訂單'] && props.userInfo) && 
-                <EditOrder {...props}  myOrder={myOrder}/>}
+                <EditOrder {...props}  
+                    myOrder={myOrder}
+                    saveOrder={update.saveOrder}
+                />
+            }
         </Layout>
     )
 }

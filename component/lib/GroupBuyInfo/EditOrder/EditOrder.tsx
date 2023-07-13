@@ -30,8 +30,9 @@ export function EditOrder(props: EditOrderProps){
     } = useEditOrder(props.myOrder,props.userInfo.userData)
     function saveOrder(order: UserOrder, orderNote: string) {
         if (!props.loadingLock) {
-            order.orderNote = orderNote;
-            props.saveOrder(order);
+            const newOrder = order.clone();
+            newOrder.orderNote = orderNote;
+            props.saveOrder(newOrder);
         }
     }
     const sideBarStyle: CSSProperties = {
@@ -44,9 +45,7 @@ export function EditOrder(props: EditOrderProps){
         backgroundColor: 'white'
     }
 
-    
     return(
-        
         <div style={{
             width: 'calc(100% - 950px + 50vw)',
             minWidth: '350px'
@@ -114,6 +113,7 @@ export function EditOrder(props: EditOrderProps){
                             總金額：{myOrder.totalMoney} 元</div>
                         <MyHoverButton
                             theme="green"
+                            disabled={props.loadingLock}
                             style={{marginTop: '10px'}}
                             onClick={()=>{ saveOrder(myOrder, orderNote)}}
                         >

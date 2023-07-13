@@ -35,6 +35,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
     const [loadingLock, setLoadingLock] = useState<boolean>(false);
     
     const myOrder: UserOrder | undefined = useMemo(()=>{
+        // TODO: 如果沒有權限看別人的清單，要怎麼拿自己的order userOrderList 會是undefined
         if (!userInfo || !groupBuyObject || !groupBuyObject.userOrderList?.length) return undefined;
         else {
             return groupBuyObject.userOrderList.find((userOrder)=>
@@ -53,8 +54,6 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
             setGroupBuyObject(undefined);
             loadGroupBuy(groupId); // 載入團單資訊
         }
-
-        
     },[groupId])
     async function loadGroupBuy(groupId: string){
         setLoadingLock(true);
@@ -102,7 +101,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
             } catch (error) {
                 setErrorMessage(`狀態變更失敗! 錯誤代碼: ${ErrorCode['團單變更狀態失敗']} ，請再試一次或是來信回報`);
                 const errorLog = `團單變更狀態失敗 >> groupId = ${groupBuyObject.uid} ，從${groupBuyObject.statusText} 狀態改成 :${getKeyByValue(GroupBuyStatus,type)}，錯誤訊息: ${error}`;
-                serverUtils.addLog(errorLog,LoggingLevel['DEBUG'],ErrorCode['團單變更狀態失敗'])
+                serverUtils.addLog(errorLog,LoggingLevel['FATAL'],ErrorCode['團單變更狀態失敗'])
             }
             setLoadingLock(false);
 
@@ -121,11 +120,26 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
             } catch (error) {
                 setErrorMessage(`刪除訂單失敗! 錯誤代碼: ${ErrorCode['刪除訂單失敗']} ，請再試一次或是來信回報`);
                 const errorLog = `刪除訂單失敗 >> orderId = ${myOrder.uid} ,userId = ${userInfo?.loginId} 刪除自己訂單失敗，錯誤訊息: ${error}`;
-                serverUtils.addLog(errorLog,LoggingLevel['DEBUG'],ErrorCode['團單變更狀態失敗'])
+                serverUtils.addLog(errorLog,LoggingLevel['FATAL'],ErrorCode['刪除訂單失敗'])
                 setLoadingLock(false);
             }
         }
     },[myOrder,groupId])
+
+    const saveOrder = useCallback(async (newOrder: UserOrder) =>{
+        setLoadingLock(true);
+        try {
+            await serverUtils.saveOrder(groupId,newOrder);
+            await loadGroupBuy(groupId);
+            setPageName(InfoPage['資訊頁']); // 成功之後自動到成功畫面
+        } catch (error) {
+            setErrorMessage(`儲存訂單失敗! 錯誤代碼: ${ErrorCode['儲存訂單失敗']} ，請再試一次或是來信回報`);
+            const errorLog = `儲存訂單失敗 >> orderId = ${newOrder.uid} ,userId = ${userInfo?.loginId} 儲存自己訂單失敗，錯誤訊息: ${error}`;
+            serverUtils.addLog(errorLog,LoggingLevel['FATAL'],ErrorCode['儲存訂單失敗'])
+            setLoadingLock(false);
+        }
+        setLoadingLock(false);
+    },[groupId])
     return {
         groupBuyObject,
         pageName,setPageName,
@@ -135,7 +149,8 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
         update:{
             updatePayState,
             updateGroupState,
-            deleteMyOrder
+            deleteMyOrder,
+            saveOrder
         },
         errorMessage
     }

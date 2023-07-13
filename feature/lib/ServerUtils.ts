@@ -7,7 +7,8 @@ import { getTimeString } from '@/utils';
 
 export class ServerUtils {
   constructor(
-      public apiUrl = './api/'
+      public apiUrl = './api/',
+      private JWT = localStorage.getItem('token')  // TODO: 不要把jwt放在 localStorage
   ) {
     
   }
@@ -15,7 +16,7 @@ export class ServerUtils {
     return (axios.create({
         baseURL: this.apiUrl,
         headers: {
-          "Authorization": localStorage.getItem('token') // TODO: 不要把jwt放在 localStorage
+          "Authorization": this.JWT
         }
       }));
   }
@@ -23,6 +24,7 @@ export class ServerUtils {
     const result = myUser.clone();
     const storeUidList = await this.loadFavoriteStoreUidList(result);
     result.favoriteStoreUidList = storeUidList;
+    localStorage.setItem('token','0000'); //test用
     return Promise.resolve(myUser.clone())
 
   }
@@ -46,7 +48,6 @@ export class ServerUtils {
 
   public async loadGroupBuy(groupId: string):Promise<GroupBuyObject | null> {
     // TODO: 這裡載入的時候，userOrder就要包含在裡面
-    
     return new Promise(async (resolve)=>{
       const nowList = await this.loadUserGroupBuyList('now');
       const hisList = await this.loadUserGroupBuyList('history');
@@ -68,6 +69,19 @@ export class ServerUtils {
       groupObject.userOrderList = newList
     }
    }
+  }
+  public async saveOrder(groupId: string,newOrder: UserOrder): Promise<void> {
+    const groupObject = await this.loadGroupBuy(groupId);
+    if (groupObject?.userOrderList) {
+      const newList = [...groupObject.userOrderList ];
+      const index = groupObject.userOrderList.findIndex((o)=> o.uid === newOrder.uid)
+      if (index !== -1) {
+        newList[index] = newOrder;
+      } else {
+        newList.push(newOrder);
+      }
+      groupObject.userOrderList = newList
+     }
   }
 
   public updateGroupState(groupId: string, type: GroupBuyStatus): Promise<string>{
