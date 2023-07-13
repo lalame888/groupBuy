@@ -6,6 +6,7 @@ import { GroupTool } from "./GroupTool";
 import { THEME } from "@/styles/theme";
 import { MyOrderInfo } from "./MyOrderInfo";
 import { OrderListView } from "./OrderListView/OrderListView";
+import { CSSProperties } from "react";
 
 interface GroupInfoPageProps extends GroupPageProps {
     updatePayState(updateList: Array<UserOrder>): void // 更動繳費或取貨狀態
@@ -29,6 +30,10 @@ export function GroupInfoPage(props: GroupInfoPageProps){
     } = props.groupBuyObject
     const isOwner = builder.loginId === props.userInfo?.loginId;
     
+    const centerRowStyle: CSSProperties = {
+        display: 'flex',
+        justifyContent: 'center'
+    }
     return (
         <div>
             <BackButton/>
@@ -60,29 +65,33 @@ export function GroupInfoPage(props: GroupInfoPageProps){
                         onDeleteOrder={props.deleteMyOrder}
                         toEditOrder={()=>props.setPageName(InfoPage['編輯訂單'])}
                     />:
-                    (props.userInfo && isEditAble) ?
-                    <MyHoverButton 
-                        style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
-                        onClick={()=>{props.setPageName(InfoPage['編輯訂單'])}}
-                    >
-                        <div style={{marginTop: '1rem'}}>
-                            <p>你還沒有填寫任何訂單！</p>
-                            <p>點選此區塊以新增訂單資訊</p>
-                        </div>
-                        
-                    </MyHoverButton> 
+                (props.userInfo && isEditAble) ?
+                    <div style={centerRowStyle}>
+                        <MyHoverButton 
+                            style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
+                            onClick={()=>{props.setPageName(InfoPage['編輯訂單'])}}
+                        >
+                            <div style={{marginTop: '1rem'}}>
+                                <p>你還沒有填寫任何訂單！</p>
+                                <p>點選此區塊以新增訂單資訊</p>
+                            </div>
+                            
+                        </MyHoverButton>
+                    </div>
                     :
                     (isEditAble) &&
-                    <MyHoverButton 
-                    // TODO: 導向登入/ 訪客登記
-                        style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
-                        to={`./login`}
-                    >
-                        <div style={{marginTop: '1rem'}}>
-                            <p>登入後才可新增訂單</p>
-                            <p>點選此區塊以登入帳號</p>
-                        </div>
-                    </MyHoverButton>
+                    <div style={centerRowStyle}>
+                        <MyHoverButton 
+                        // TODO: 導向登入/ 訪客登記
+                            style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
+                            to={`./login`}
+                        >
+                            <div style={{marginTop: '1rem'}}>
+                                <p>登入後才可新增訂單</p>
+                                <p>點選此區塊以登入帳號</p>
+                            </div>
+                        </MyHoverButton>
+                    </div>
             }
             {
                 (setting.openOrderView || isOwner) && (userOrderList) &&

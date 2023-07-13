@@ -28,10 +28,10 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
 
     }
 
-  static loadUserOrder(data: UserOrderData, orderList: Array<GoodsData>): UserOrder {
+  static loadUserOrder(data: UserOrderData, orderList: Array<Partial<GoodsData>>): UserOrder {
       const orders = orderList.map((order)=> {
           const { name, money, number, note, appendTermList } = order; // 把物件變成class
-          return new GoodsData(name, money, number, note, appendTermList);
+          return new GoodsData(name||'', money||0, number, note, appendTermList);
       })
       return new UserOrder(
           data.user,
@@ -68,5 +68,11 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
   
 
 
+  set orderList(newList: Array<GoodsData>) {
+    this.dataSetter('orderList',[...newList]);
+  }
+  set orderNote(newNote: string) {
+    this.dataSetter('orderNote', newNote) 
+  }
 
 }

@@ -17,8 +17,7 @@ interface MyOrderInfoProps {
 export function MyOrderInfo(props: MyOrderInfoProps){
     const style: CSSProperties = {
         border: THEME.border,
-        borderRadius: THEME.buttonBorderRadius,
-        
+        borderRadius: THEME.buttonBorderRadius
     }
     const titleStyle: CSSProperties = {
         borderBottom: THEME.border,
@@ -31,7 +30,6 @@ export function MyOrderInfo(props: MyOrderInfoProps){
         padding: '1.4rem',
         lineHeight: '0.7rem',
     }
-
     
     return(
         <div style={style}>
@@ -96,10 +94,7 @@ export function MyOrderInfo(props: MyOrderInfoProps){
                         })}
                     </tbody>
                 </Table>
-
             </div>
-
         </div> 
-            
     )
 }

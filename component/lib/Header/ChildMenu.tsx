@@ -2,7 +2,7 @@ import { PageRoute, PageState } from "@/feature";
 import { THEME } from "@/styles/theme";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { CSSProperties, useMemo, useState } from "react"
+import { CSSProperties, useState } from "react"
 interface ChildMenuProps {
     style?: CSSProperties
 }

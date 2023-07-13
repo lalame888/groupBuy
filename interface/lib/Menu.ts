@@ -1,7 +1,10 @@
+import { generateUUID } from "@/utils";
 import { Cloneable } from "./Cloneable";
 
 export type MenuData = {
-    // TODO
+  name: string,
+  money: number,
+  appendMenu: Array<AppendTerm> 
 }
 
 export type AppendTerm = {
@@ -14,6 +17,7 @@ export class GoodsData extends Cloneable<GoodsData> {
         public number: number = 1, //數量
         public note: string = "",
         public appendTermList: Array<AppendTerm> = [], // 目前有選擇的加工項目
+        public uid: string = generateUUID()
     ){
         super();
     }

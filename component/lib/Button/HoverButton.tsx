@@ -6,7 +6,7 @@ import styled  from 'styled-components';
 
 interface HoverButtonProps {
     to?: string;
-    theme?:  'green' 
+    theme?:  'green' | 'lightgray'
     size?: 'long'
     style?: CSSProperties;
     onClick?(event: React.MouseEvent): void;
@@ -21,12 +21,12 @@ const HoverButton = styled(Button)`
   border-radius: 25px;
   color: black;
   padding: 6px ${(props) => (props.size === 'long' ? '40px' : '20px')};
-  border: 1px solid ${(props) => props.theme.borderColor};
+  border: ${(props) => props.theme.border};
   background-color: ${(props) => props.theme.backgroundColor};
   align-items: center;
   
   &:hover {
-    border: 1px solid ${(props) => props.theme.borderColor};
+    border: ${(props) => props.theme.border};
     background-color: ${(props) =>
       props.disabled ? '' : props.theme.hover.backgroundColor};
     cursor: ${(props) => (props.disabled ? '' : 'pointer')};
@@ -35,7 +35,8 @@ const HoverButton = styled(Button)`
 `;
 type HoverThemeType = CSSProperties & {hover: CSSProperties}
 type ThemeType = {
-    green: HoverThemeType
+    green: HoverThemeType,
+    lightgray: HoverThemeType
 }
 export const MyHoverButton =  forwardRef<HTMLSpanElement, HoverButtonProps>((props,ref)=> {
     const linkRef= useRef<HTMLAnchorElement>(null);
@@ -43,14 +44,21 @@ export const MyHoverButton =  forwardRef<HTMLSpanElement, HoverButtonProps>((pro
         green: {
             
             backgroundColor: THEME.lightGreenColor,
-            borderColor:'#489A81',
+            border:'1px solid #489A81',
             hover:{
                 backgroundColor: '#7acac5ad'
+            }
+        },
+        lightgray:{
+            backgroundColor: '#F6F6F6',
+            border: '2px dashed gray',
+            hover:{
+                backgroundColor: 'lightgray'
             }
         }
     }
     const defaultTheme: HoverThemeType = {
-        borderColor: '',
+        border: '',
         backgroundColor: 'white',
         hover: {
             backgroundColor: THEME.lightGreenColor

@@ -59,7 +59,7 @@ export function OrderListView(props: OrderListViewProps){
 
                         <span>表格顯示：</span>
                         <Form.Select
-                            style={{marginLeft: '10px',width: '150px'}}
+                            style={{marginLeft: '10px',width: 'auto'}}
                             onChange={(e)=>{
                                 const value = e.target.value as TableViewType;
                                 setTableType(value);

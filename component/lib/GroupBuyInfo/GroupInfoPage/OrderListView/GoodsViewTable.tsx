@@ -70,11 +70,8 @@ export function GoodsViewTable(props: OrderListViewProps){
                         </tr>
                         )}
                         </>
-                        
                     )
-                   
                 }
-                    
                 )}
             </tbody>
             <tfoot>

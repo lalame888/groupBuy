@@ -10,7 +10,7 @@ export enum GroupBuyStatus {
     '已完成' ,  // 順利完成的
     '已取消團單' // 中途刪掉的
 }
-type GroupSetting = {
+export type GroupSetting = {
     canNewTerm: boolean, // 是不是可以自行新增菜單品項,
     endTime: string | undefined, // 截止跟團的時間，包含設定的時間或是手動截止的時間
     openOrderView: boolean, // 開放別人觀看團單

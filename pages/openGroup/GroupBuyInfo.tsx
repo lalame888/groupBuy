@@ -34,10 +34,10 @@ export default function GroupBuyInfo(){
                     deleteMyOrder={update.deleteMyOrder}
                 />
             }
-            {(pageName === InfoPage['編輯團單']) && 
+            {(pageName === InfoPage['編輯團單'] && props.userInfo) && 
                 <EditGroup {...props} />}
-            {(pageName === InfoPage['編輯訂單']) && 
-                <EditOrder {...props} />}
+            {(pageName === InfoPage['編輯訂單'] && props.userInfo) && 
+                <EditOrder {...props}  myOrder={myOrder}/>}
         </Layout>
     )
 }
