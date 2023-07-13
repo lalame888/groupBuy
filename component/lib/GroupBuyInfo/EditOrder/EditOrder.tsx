@@ -1,10 +1,10 @@
-import { GoodsData, UserOrder } from "@/interface";
+import { GoodsData, InfoPage, UserOrder } from "@/interface";
 import { GroupPageProps, useEditOrder } from "../utils";
 import { PageTitle } from "../../Other";
 import { GroupInfoDiv } from "../GroupInfoPage/GroupInfoDiv";
 import { MenuCanvas } from "../../Image/MenuCanvas";
-import { MyHoverButton } from "../../Button";
-import { CSSProperties } from "react";
+import { BackButton, Confirm, MyHoverButton } from "../../Button";
+import { CSSProperties, useEffect } from "react";
 import { EditGoodsCard } from "./EditGoodsCard";
 
 interface EditOrderProps extends GroupPageProps {
@@ -27,7 +27,8 @@ export function EditOrder(props: EditOrderProps){
         myOrder,orderNote, setOrderNode,
         editGoods,deleteGoods,
         addBlankGoods
-    } = useEditOrder(props.myOrder,props.userInfo.userData)
+    } = useEditOrder(props.myOrder,props.userInfo.userData);
+
     function saveOrder(order: UserOrder, orderNote: string) {
         if (!props.loadingLock) {
             const newOrder = order.clone();
@@ -45,12 +46,21 @@ export function EditOrder(props: EditOrderProps){
         backgroundColor: 'white'
     }
 
+   
+
     return(
         <div style={{
             width: 'calc(100% - 950px + 50vw)',
             minWidth: '350px'
         }}>
-            <PageTitle title={groupName}/>
+            <Confirm
+                onConfirm={()=> props.setPageName(InfoPage['資訊頁'])}
+                text="確認要返回嗎?將會捨棄目前的資料"
+                title="確認要返回嗎?"
+            >
+                <BackButton noRouter/>
+            </Confirm>
+            <PageTitle title={`${groupName} - 訂單編輯`}/>
             <GroupInfoDiv 
                 store={store}
                 builder={builder}

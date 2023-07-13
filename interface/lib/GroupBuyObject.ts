@@ -115,6 +115,7 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
     get store(): StoreObject | undefined { return this.dataGetter('store') as StoreObject}
     get userOrderList(): Array<UserOrder> | undefined {return this.userOrder}
     get setting(): GroupSetting{return this.dataGetter('setting') as GroupSetting}
+    
     // 和目前跟團團單有關的功能
 
 

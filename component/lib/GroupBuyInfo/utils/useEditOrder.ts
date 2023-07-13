@@ -1,10 +1,15 @@
 import { GoodsData, UserData, UserOrder } from "@/interface"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 
 export function useEditOrder(order: UserOrder | undefined, userData: UserData){
     const [myOrder, setMyOrder] = useState<UserOrder>(order || new UserOrder(userData))
     const [orderNote, setOrderNode] = useState<string>(myOrder.orderNote);
+    
+    useEffect(()=>{
+        setMyOrder(order || new UserOrder(userData));
+        setOrderNode(myOrder.orderNote)
+    },[order])
 
     const editGoods = useCallback((newGoods: GoodsData,index: number)=>{
         const newOrder = myOrder.clone();
@@ -31,7 +36,15 @@ export function useEditOrder(order: UserOrder | undefined, userData: UserData){
         }
     },[myOrder])
 
-    // TODO: 最後要儲存的時候，再看使用者送出的Order裡面有哪些商品是原本沒有的 & 看設定是可不可以更改的
+     //頁面離開或者瀏覽器關閉的時候給予提示  
+     useEffect(()=>{
+        function checkHasFile(): string | undefined {
+            return '資料尚未儲存，確定要離開本頁面嗎？'
+        }
+       window.onbeforeunload = checkHasFile;
+       return  ()=> {window.onbeforeunload = null}
+    },[])
+
     return {
           myOrder,
           editGoods,

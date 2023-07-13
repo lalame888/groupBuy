@@ -130,6 +130,33 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
         setLoadingLock(true);
         try {
             await serverUtils.saveOrder(groupId,newOrder);
+            // 最後要儲存的時候，再看使用者送出的Order裡面有哪些商品是原本沒有的 & 看設定是可不可以更改的
+            try {
+                if (groupBuyObject?.store  && groupBuyObject.store.editable) {
+                    const menuData =  groupBuyObject.store.menuData || [];
+                    const newMenuData = newOrder.orderList.filter((goods)=>{
+                        const data =  menuData.find((d)=> d.name)
+                        if (data) {
+                            if (data.money!== goods.money) return true;
+                            return goods.appendTermList.some((append)=>{
+                                data.appendMenu.find((t)=> t.name === append.name && t.money === append.money) === undefined 
+                            })
+                        } else {
+                            return true    // 新增的
+                        }
+                    })
+                    if (newMenuData.length > 0) {
+                        // 有被更動的 => 去改store的資料
+                        await serverUtils.updateStoreMenuData(groupBuyObject.store,newMenuData);
+                    }
+                    
+                }
+            } catch (error) {
+                const errorLog = `更改商家MenuData失敗 >> storeUid = ${groupBuyObject?.store?.uid}, newOrder =${newOrder.stringify()}}
+                ，錯誤訊息: ${error}`;
+                serverUtils.addLog(errorLog,LoggingLevel['ERROR'],ErrorCode['儲存訂單失敗'])
+            }
+            
             await loadGroupBuy(groupId);
             setPageName(InfoPage['資訊頁']); // 成功之後自動到成功畫面
         } catch (error) {
@@ -139,7 +166,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
             setLoadingLock(false);
         }
         setLoadingLock(false);
-    },[groupId])
+    },[groupId,groupBuyObject?.store])
     return {
         groupBuyObject,
         pageName,setPageName,

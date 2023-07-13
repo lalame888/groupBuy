@@ -1,6 +1,6 @@
 
 
-import { ErrorCode, GroupBuyObject, GroupBuyStatus, LoggingLevel, UserInfo, UserOrder } from '@/interface';
+import { ErrorCode, GoodsData, GroupBuyObject, GroupBuyStatus, LoggingLevel, MenuData, StoreData, StoreObject, UserInfo, UserOrder } from '@/interface';
 import axios, { AxiosInstance, AxiosResponse, CancelTokenSource } from 'axios';
 import { groupBuyData1, groupBuyObject1, groupBuyObject2, myUser } from './FakeData';
 import { getTimeString } from '@/utils';
@@ -53,7 +53,7 @@ export class ServerUtils {
       const hisList = await this.loadUserGroupBuyList('history');
       const result = [...nowList,...hisList].find((g)=>g.uid === groupId);
       setTimeout(()=>{
-        if (result) resolve(result);
+        if (result) resolve(result.clone());
         else resolve(null);
       },1000)
     });
@@ -87,6 +87,27 @@ export class ServerUtils {
   public updateGroupState(groupId: string, type: GroupBuyStatus): Promise<string>{
     const now = new Date();
     return Promise.resolve(getTimeString(now));
+  }
+  public async updateStoreMenuData(store: StoreObject, newMenuData: Array<GoodsData>) {
+    const newList = store.menuData? [...store.menuData]:[];
+    newMenuData.forEach((newD)=>{
+      const menuD = {name: newD.name, money: newD.money, appendMenu: newD.appendTermList }
+      const index = newList.findIndex((d : MenuData)=> d.name === newD.name);
+      if (index!== -1) {
+        newList[index] = menuD;
+      } else {
+        newList.push(menuD);
+      }
+    })
+    const newStore = new StoreObject({...store,menuData:newList })
+
+    const groupBuyList = [...await this.loadUserGroupBuyList('now'), ...await this.loadUserGroupBuyList('history')];
+    
+    groupBuyList.forEach((g)=>{
+      if(g.store?.uid === newStore.uid) {
+        g.store = newStore;
+      }
+    })
   }
 
   public addLog(message: string, logLevel: LoggingLevel, errorCode?: ErrorCode): Promise<void> {

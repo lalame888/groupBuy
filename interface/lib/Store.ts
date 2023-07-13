@@ -10,6 +10,9 @@ export type BusinessHours = {
 }
 // TODO: 要想一下讓使用者修改菜單的問題
 // 店家資訊先不公開共享 => 公開共享時維護很麻煩 應該要有權限管理等等，但如果真的要給大眾使用，有共享才比較符合成本
+type StoreSetting = {
+    editable: boolean
+}
 
 export type StoreData = {
     uid: string
@@ -20,6 +23,7 @@ export type StoreData = {
     menuImage: Array<string>  // 店家菜單，可以多張
     businessHours: Array<BusinessHours> // 營業時間
     menuData: Array<MenuData> | undefined // 菜單資訊 (一開始有可能不拿)
+    setting: StoreSetting
 }
 // TODO: 還沒有存menu
 // 流程上：去找店家資訊，拿店家uid找menu，然後再結合創造 StoreObject
@@ -38,7 +42,10 @@ export class StoreObject extends DataSetter<StoreObject,StoreData > {
             coverImage: '',
             menuImage: [],
             businessHours: [],
-            menuData: undefined
+            menuData: undefined,
+            setting: {
+                editable: true
+            }
         }
         super({...initSetting,...data});
     }
@@ -50,7 +57,9 @@ export class StoreObject extends DataSetter<StoreObject,StoreData > {
     get coverImage() {return this.dataGetter('coverImage') as string}  
     get menuImage() {return this.dataGetter('menuImage') as Array<string>}
     get menuData(): Array<MenuData> | undefined {return this.dataGetter('menuData') as Array<MenuData>}
-
+    get editable(): boolean { const setting =  this.dataGetter('setting')  as StoreSetting
+        return setting.editable    
+    }
     get businessHours(): Array<string> {
         if (this.data.businessHours.length === 0) return ['無資訊'];
         return this.data.businessHours
@@ -86,6 +95,7 @@ export class StoreObject extends DataSetter<StoreObject,StoreData > {
         }
 
     }
+    get uid(): string {return this.dataGetter('uid') as string}
 
     
 }
