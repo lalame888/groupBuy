@@ -12,6 +12,7 @@ interface GroupInfoPageProps extends GroupPageProps {
     updatePayState(updateList: Array<UserOrder>): void // 更動繳費或取貨狀態
     updateGroupState(type:GroupBuyStatus): void
     deleteMyOrder(): void;
+    receiptOrder(order: UserOrder): void
     myOrder: UserOrder | undefined
 }
 export function GroupInfoPage(props: GroupInfoPageProps){
@@ -58,40 +59,41 @@ export function GroupInfoPage(props: GroupInfoPageProps){
             />
 
             {(props.myOrder !== undefined && props.myOrder.orderList.length>0) ?
-                    <MyOrderInfo
-                        orderInfo={props.myOrder}
-                        isEditable={isEditAble}
-                        loadingLock={props.loadingLock}
-                        onDeleteOrder={props.deleteMyOrder}
-                        toEditOrder={()=>props.setPageName(InfoPage['編輯訂單'])}
-                    />:
-                (props.userInfo && isEditAble) ?
-                    <div style={centerRowStyle}>
-                        <MyHoverButton 
-                            style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
-                            onClick={()=>{props.setPageName(InfoPage['編輯訂單'])}}
-                        >
-                            <div style={{marginTop: '1rem'}}>
-                                <p>你還沒有填寫任何訂單！</p>
-                                <p>點選此區塊以新增訂單資訊</p>
-                            </div>
-                            
-                        </MyHoverButton>
-                    </div>
-                    :
-                    (isEditAble) &&
-                    <div style={centerRowStyle}>
-                        <MyHoverButton 
-                        // TODO: 導向登入/ 訪客登記
-                            style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
-                            to={`./login`}
-                        >
-                            <div style={{marginTop: '1rem'}}>
-                                <p>登入後才可新增訂單</p>
-                                <p>點選此區塊以登入帳號</p>
-                            </div>
-                        </MyHoverButton>
-                    </div>
+                <MyOrderInfo
+                    orderInfo={props.myOrder}
+                    isEditable={isEditAble}
+                    loadingLock={props.loadingLock}
+                    onDeleteOrder={props.deleteMyOrder}
+                    toEditOrder={()=>props.setPageName(InfoPage['編輯訂單'])}
+                    receiptOrder={(!isEnd)? ()=>props.receiptOrder(props.myOrder as UserOrder) : undefined}
+                />:
+            (props.userInfo && isEditAble) ?
+                <div style={centerRowStyle}>
+                    <MyHoverButton 
+                        style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
+                        onClick={()=>{props.setPageName(InfoPage['編輯訂單'])}}
+                    >
+                        <div style={{marginTop: '1rem'}}>
+                            <p>你還沒有填寫任何訂單！</p>
+                            <p>點選此區塊以新增訂單資訊</p>
+                        </div>
+                        
+                    </MyHoverButton>
+                </div>
+                :
+                (isEditAble) &&
+                <div style={centerRowStyle}>
+                    <MyHoverButton 
+                    // TODO: 導向登入/ 訪客登記
+                        style={{border: THEME.border, backgroundColor: '#E5E5E533'}}
+                        to={`./login`}
+                    >
+                        <div style={{marginTop: '1rem'}}>
+                            <p>登入後才可新增訂單</p>
+                            <p>點選此區塊以登入帳號</p>
+                        </div>
+                    </MyHoverButton>
+                </div>
             }
             {
                 (setting.openOrderView || isOwner) && (userOrderList) &&
@@ -105,7 +107,6 @@ export function GroupInfoPage(props: GroupInfoPageProps){
     )
 }
 // TODO 截止之後還要有讓人家更動每個人狀態的(繳錢)
-// TODO 還有匯出團單
 
 /** Info有幾個狀況組合
  * 
@@ -122,7 +123,7 @@ export function GroupInfoPage(props: GroupInfoPageProps){
  * - 我的訂單 -
  *  1. 無登入 單純看資訊，需登入後可以跟團
  *  2. 有登入 無建立自己的訂單、可以建立 (切換頁面)
- *  3. 有登入 有建立自己的訂單、可以修改(切換頁面)、可以回報已繳費、已完成取貨
+ *  3. 有登入 有建立自己的訂單、可以修改(切換頁面)、已完成取貨
  * 動作：
  * (其他頁面: EditOrder)：建立&修改
  * (此頁面)：回報繳費、回報完成取貨 

@@ -33,8 +33,7 @@ type GroupBuyData = {
 }
 export type LoadGroupData = {
     data: GroupBuyData,
-    builder: UserData,
-    userOrder: Array<UserOrder> | undefined
+    builder: UserData
 }
 
 export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
@@ -71,7 +70,6 @@ export class GroupBuyObject extends DataSetter<GroupBuyObject,GroupBuyData >  {
             prams.builder,
             prams.data
         );
-        result.userOrder = prams.userOrder;
         // TODO: 如果是非團主&沒有觀看userOrder權限的，要另外處理
         // TODO: 而且可以不用一開始就給，有點進去資料再看
         return result;

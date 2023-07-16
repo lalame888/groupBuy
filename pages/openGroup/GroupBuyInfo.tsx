@@ -32,6 +32,7 @@ export default function GroupBuyInfo(){
                     updateGroupState={update.updateGroupState}
                     myOrder={myOrder}
                     deleteMyOrder={update.deleteMyOrder}
+                    receiptOrder={ update.receiptOrder}
                 />
             }
             {(pageName === InfoPage['編輯團單'] && props.userInfo) && 

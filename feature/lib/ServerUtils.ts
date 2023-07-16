@@ -1,8 +1,8 @@
 
 
-import { ErrorCode, GoodsData, GroupBuyObject, GroupBuyStatus, LoggingLevel, MenuData, StoreData, StoreObject, UserInfo, UserOrder } from '@/interface';
+import { ErrorCode, GoodsData, GroupBuyObject, GroupBuyStatus, LoggingLevel, MenuData, ReceiptType, StoreData, StoreObject, UserInfo, UserOrder } from '@/interface';
 import axios, { AxiosInstance, AxiosResponse, CancelTokenSource } from 'axios';
-import { groupBuyData1, groupBuyObject1, groupBuyObject2, myUser } from './FakeData';
+import { groupBuyData1, groupBuyObject1, groupBuyObject2, myUser, userOrder, userOrder2 } from './FakeData';
 import { getTimeString } from '@/utils';
 
 export class ServerUtils {
@@ -53,13 +53,22 @@ export class ServerUtils {
       const nowList = await this.loadUserGroupBuyList('now');
       const hisList = await this.loadUserGroupBuyList('history');
       const result = [...nowList,...hisList].find((g)=>g.uid === groupId);
+      if (result) {
+        const userOrder = await this.loadUserOrderList(groupId);
+        result.userOrderList = userOrder;
+      }
       setTimeout(()=>{
         if (result) resolve(result);
         else resolve(null);
       },1000)
     });
   }
+  public async loadUserOrderList(groupId: string): Promise<Array<UserOrder>> {
+    return [userOrder, userOrder2]
+  }
+  public async receiptOrder(order: UserOrder,newState: ReceiptType): Promise<void>  {
 
+  }
   public async deleteOrder(groupId: string, order: UserOrder): Promise<void> {
    const groupObject = await this.loadGroupBuy(groupId);
    if (groupObject?.userOrderList) {

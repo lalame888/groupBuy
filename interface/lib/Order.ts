@@ -1,13 +1,19 @@
-import { generateUUID } from "@/utils";
+import { generateUUID, getKeyByValue } from "@/utils";
 import { DataSetter } from "./DataSetter";
 import { UserData } from "./UserInfo";
 import { GoodsData } from "./Menu";
+
+export enum ReceiptType {
+  '已簽收完畢' = 'receipted',
+  '團主已出貨，尚未簽收' = 'shipped',
+  '未到貨' = 'no'
+}
 
 type UserOrderData = {
     user: UserData,
     orderList: Array<GoodsData>
     payMoney: number // 已經付款的金額
-    receipt: boolean // 是否簽收/取得貨品
+    receipt: ReceiptType // 是否簽收/取得貨品
     orderNote: string //訂單備註
     appendMoney: number
     uid: string
@@ -19,7 +25,7 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
             user,
             orderList: [],
             payMoney: 0,
-            receipt: false,
+            receipt: ReceiptType['未到貨'],
             orderNote:'',
             appendMoney: 0,
             uid: generateUUID()
@@ -46,6 +52,8 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
   get appendMoney(): number {return this.dataGetter('appendMoney') as number}
   get orderNote(): string {return this.dataGetter('orderNote') as string}
   get payMoney(): number {return this.dataGetter('payMoney') as number}
+  get receipt(): ReceiptType {return this.dataGetter('receipt') as ReceiptType}
+  get isReceipted(): boolean {return this.receipt === ReceiptType['已簽收完畢']}
   get totalMoney(): number {  // 回傳總金額
     let result: number = this.data.appendMoney;
     if (this.data.orderList.length === 0) return 0;
@@ -59,7 +67,7 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
     return this.data.orderList.map((order)=> order.orderContainText).join('、')
   }
   get payStatus(): string {
-    if (this.data.payMoney === this.totalMoney) return `已付款完成${this.data.receipt ? '，已簽收': '尚未簽收'}`;
+    if (this.data.payMoney === this.totalMoney) return `已付款完成，${ getKeyByValue(ReceiptType,this.data.receipt)}`;
     if (this.data.payMoney > this.totalMoney) return `已付款完成，尚需找 ${this.data.payMoney - this.totalMoney}元`;
     if (this.data.payMoney === 0) return '尚未付款';
     else return `已支付${this.data.payMoney}元，尚需補${this.totalMoney - this.data.payMoney}元`

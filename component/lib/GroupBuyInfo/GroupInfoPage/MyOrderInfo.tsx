@@ -12,6 +12,7 @@ interface MyOrderInfoProps {
     isEditable: boolean
     onDeleteOrder(): void
     toEditOrder(): void
+    receiptOrder?(): void // 回報已取貨
     loadingLock: boolean
 }
 export function MyOrderInfo(props: MyOrderInfoProps){
@@ -63,6 +64,21 @@ export function MyOrderInfo(props: MyOrderInfoProps){
                             />
                         </Confirm>
                     </div>
+                }
+                {
+                    (!props.isEditable && props.receiptOrder && !props.orderInfo.isReceipted) && 
+                    <Confirm
+                            disabled={props.loadingLock}
+                            title={'確定回報已簽收並完成訂單？'}
+                            text={'確定回報已簽收並完成訂單？\n訂單狀態將會顯示完成簽收，\n請確認是否繼續。'}
+                            onConfirm={props.onDeleteOrder}
+                        >
+                        <MyHoverButton
+                            theme="green"
+                        >
+                            完成訂單簽收
+                        </MyHoverButton>
+                    </Confirm>
                 }
             </div>
             <div style={bodyStyle}>

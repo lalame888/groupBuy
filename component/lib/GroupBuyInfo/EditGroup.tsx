@@ -5,6 +5,5 @@ interface EditGroupProps {
 }
 export  function EditGroup(props: EditGroupProps){
     
-    console.log();
     return (<div></div>)
 }

@@ -1,5 +1,5 @@
 import { serverUtils } from "@/feature";
-import { ErrorCode, GroupBuyObject, GroupBuyStatus, InfoPage, LoadStatus, LoadingStatus, LoggingLevel, UserInfo, UserOrder } from "@/interface";
+import { ErrorCode, GroupBuyObject, GroupBuyStatus, InfoPage, LoadStatus, LoadingStatus, LoggingLevel, ReceiptType, UserInfo, UserOrder } from "@/interface";
 import { getKeyByValue } from "@/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -63,7 +63,6 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
                 const group = await serverUtils.loadGroupBuy(groupId);
                 if (mounted.current) {
                     setGroupBuyObject(group?.clone());
-                    console.log(group)
 
                 }
             }
@@ -110,6 +109,32 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
         }
         throw Error('尚未實作') // TODO
     },[groupBuyObject])
+    const receiptOrder = useCallback(async(order: UserOrder)=>{
+        if (userInfo ) {
+            setLoadingLock(true);
+            const newState = (order.user.loginId === userInfo.loginId)? ReceiptType['已簽收完畢'] : ReceiptType['團主已出貨，尚未簽收'];
+            try {
+                await serverUtils.receiptOrder(order,newState);
+                
+                const newOrderList =  await serverUtils.loadUserOrderList(groupId);
+                if (mounted.current) {
+                    setGroupBuyObject((old)=>{
+                        if (!old || old.uid !== groupId) return old;
+                        const newObject = old.clone();
+                        newObject.userOrderList = newOrderList;
+                        return newObject;
+                    })
+                }
+           } catch (error) {
+                setErrorMessage(`訂單收貨狀態變更失敗! 錯誤代碼: ${ErrorCode['訂單收貨狀態變更失敗']} ，請再試一次或是來信回報`);
+                const errorLog = `訂單收貨狀態變更失敗 >> order = ${order.uid} ，從${order.receipt} 狀態改成 :${newState}，錯誤訊息: ${error}`;
+                serverUtils.addLog(errorLog,LoggingLevel['ERROR'],ErrorCode['訂單收貨狀態變更失敗'])
+           }
+           setLoadingLock(false);
+        } else {
+            // TODO: 無登入使用者不應該執行，狀態異常
+        }
+    },[userInfo,myOrder,groupId])
 
     const deleteMyOrder = useCallback(async()=>{
         if (myOrder) {
@@ -131,7 +156,6 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
     const saveOrder = useCallback(async (newOrder: UserOrder) =>{
         setLoadingLock(true);
         try {
-            console.log(newOrder)
             await serverUtils.saveOrder(groupId,newOrder);
             // 最後要儲存的時候，再看使用者送出的Order裡面有哪些商品是原本沒有的 & 看設定是可不可以更改的
             try {
@@ -180,7 +204,8 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
             updatePayState,
             updateGroupState,
             deleteMyOrder,
-            saveOrder
+            saveOrder,
+            receiptOrder
         },
         errorMessage
     }
