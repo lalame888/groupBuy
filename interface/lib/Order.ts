@@ -53,6 +53,7 @@ export class UserOrder extends DataSetter<UserOrder,UserOrderData>{
   get orderNote(): string {return this.dataGetter('orderNote') as string}
   get payMoney(): number {return this.dataGetter('payMoney') as number}
   get receipt(): ReceiptType {return this.dataGetter('receipt') as ReceiptType}
+  
   get isReceipted(): boolean {return this.receipt === ReceiptType['已簽收完畢']}
   get totalMoney(): number {  // 回傳總金額
     let result: number = this.data.appendMoney;

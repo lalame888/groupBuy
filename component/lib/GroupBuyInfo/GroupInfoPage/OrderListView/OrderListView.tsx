@@ -2,7 +2,7 @@ import { UserOrder } from "@/interface";
 import { THEME } from "@/styles/theme";
 import { getKeyByValue } from "@/utils";
 import { useState } from "react"
-import { Alert, Button, Form, OverlayTrigger, Popover, Table } from "react-bootstrap";
+import { Alert, Button, Form, OverlayTrigger, Popover } from "react-bootstrap";
 import { UserOverViewTable } from "./UserOverViewTable";
 import { GoodsViewTable } from "./GoodsViewTable";
 import { UserViewTable } from "./UserViewTable";
@@ -14,12 +14,12 @@ enum TableViewType {
     '訂購品項清單' = 'GoodsViewTable',
 }
 
-
 //TODO 先不要excel 因為有合併儲存格的計算問題 太花時間了
 export interface OrderListViewProps {
     groupName: string
     orderList: Array<UserOrder>
     updatePayState(updateList: Array<UserOrder>): void // TODO: 更動付款狀態
+    tableId?: string
 }
 export function OrderListView(props: OrderListViewProps){
     const [tableType, setTableType] = useState<TableViewType>(TableViewType['使用者總覽清單'])
@@ -27,7 +27,6 @@ export function OrderListView(props: OrderListViewProps){
     return(
        
         <div style={{marginTop: '30px',marginBottom: '60px'}}> 
-        
             <p style={{fontSize:'18px',display: 'flex', alignItems: 'center',justifyContent: 'space-between'}}>
                 
                 <span style={{fontSize: '24px'}}>所有人的團單</span>
@@ -73,7 +72,6 @@ export function OrderListView(props: OrderListViewProps){
 
                         </Form.Select>
                     </span>
-                    
                 }
             </p>
             {
@@ -83,19 +81,17 @@ export function OrderListView(props: OrderListViewProps){
             }
             {(props.orderList.length ===0) ?
                 <Alert style={{backgroundColor: THEME.lightGreenColor,color:'black'}}>尚無人跟單</Alert> :
-                <Table hover bordered id={tableId}>
-                    <>
-                        {
-                            (tableType === TableViewType['使用者總覽清單'])&& <UserOverViewTable {...props}/>
-                        }
-                        {
-                            (tableType === TableViewType['訂購品項清單']) && <GoodsViewTable {...props}/>
-                        }
-                        {
-                            (tableType === TableViewType['使用者訂購清單']) && <UserViewTable {...props} />
-                        }
-                    </>
-                </Table>
+                <>
+                    {
+                        (tableType === TableViewType['使用者總覽清單'])&& <UserOverViewTable {...props} tableId={tableId}/>
+                    }
+                    {
+                        (tableType === TableViewType['訂購品項清單']) && <GoodsViewTable {...props} tableId={tableId}/>
+                    }
+                    {
+                        (tableType === TableViewType['使用者訂購清單']) && <UserViewTable {...props} tableId={tableId} />
+                    }
+                </>
             }
         </div>
     )

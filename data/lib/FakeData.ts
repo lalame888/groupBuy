@@ -27,7 +27,7 @@ export const userOrder = UserOrder.loadUserOrder({
     orderNote: '', //訂單備註
     appendMoney: 0,
     uid: '12345'
-},[涼麵大JSON,味噌湯JSON])
+},[涼麵大JSON,味噌湯JSON,涼麵小JSON,{...涼麵小JSON,appendTermList: [{name: '加滷蛋',money:15}]}])
 export const userOrder2 = UserOrder.loadUserOrder({
     user: anotherUser.userData,
     orderList: [],
@@ -36,7 +36,7 @@ export const userOrder2 = UserOrder.loadUserOrder({
     orderNote: '', //訂單備註
     appendMoney: 0,
     uid: '56789'
-},[涼麵小JSON,皮蛋豆腐JSON])
+},[涼麵小JSON,皮蛋豆腐JSON,{...涼麵大JSON,appendTermList: [{name: '原味',money:0}]}])
 export const groupBuyData1: LoadGroupData = {
     data:{
         uid: '1234',

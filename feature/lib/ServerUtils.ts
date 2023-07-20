@@ -2,7 +2,7 @@
 
 import { ErrorCode, GoodsData, GroupBuyObject, GroupBuyStatus, LoggingLevel, MenuData, ReceiptType, StoreData, StoreObject, UserInfo, UserOrder } from '@/interface';
 import axios, { AxiosInstance, AxiosResponse, CancelTokenSource } from 'axios';
-import { groupBuyData1, groupBuyObject1, groupBuyObject2, myUser, userOrder, userOrder2 } from './FakeData';
+import { groupBuyData1, groupBuyObject1, groupBuyObject2, myUser, userOrder, userOrder2 } from '@/data';
 import { getTimeString } from '@/utils';
 
 export class ServerUtils {
