@@ -13,14 +13,18 @@ export function useHoverTable(){
         });
     },[])
 
-    const hoverStyle: (index: number)=> CSSProperties = useCallback((index: number)=>{
+    const hoverStyle: (index: number, textAlign?: 'default' | 'center')=> CSSProperties = useCallback((index: number, textAlign = 'default')=>{
+        const centerStyle: CSSProperties = {
+            verticalAlign: 'middle',
+            textAlign: 'center'
+        }
         const style: CSSProperties = {
-            backgroundColor: '#00000013'
+            backgroundColor: '#00000013',
         }
         if (index === hoverIndex) {
-            return style
+            return {...style, ...((textAlign=== 'center')?centerStyle :{})}
         } 
-        else return {}
+        else return {...(textAlign=== 'center')?centerStyle :{}}
     },[hoverIndex])
 
     return ({

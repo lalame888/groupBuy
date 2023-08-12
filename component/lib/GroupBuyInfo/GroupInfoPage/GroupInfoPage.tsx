@@ -9,10 +9,10 @@ import { OrderListView } from "./OrderListView/OrderListView";
 import { CSSProperties } from "react";
 
 interface GroupInfoPageProps extends GroupPageProps {
-    updatePayState(updateList: Array<UserOrder>): void // 更動繳費或取貨狀態
-    updateGroupState(type:GroupBuyStatus): void
-    deleteMyOrder(): void;
-    receiptOrder(order: UserOrder): void
+    updatePayState(updateList: Array<UserOrder>): Promise<void> // 更動繳費或取貨狀態
+    updateGroupState(type:GroupBuyStatus): Promise<void>
+    deleteMyOrder(): Promise<void>;
+    receiptOrder(order: UserOrder):Promise<void>
     myOrder: UserOrder | undefined
 }
 export function GroupInfoPage(props: GroupInfoPageProps){
@@ -98,6 +98,7 @@ export function GroupInfoPage(props: GroupInfoPageProps){
             {
                 (setting.openOrderView || isOwner) && (userOrderList) &&
                  <OrderListView
+                    isOwner ={isOwner}
                     updatePayState={props.updatePayState}
                     groupName={groupName}
                     orderList={userOrderList}

@@ -7,9 +7,7 @@ import { useHoverTable } from "./useHoverTable";
 import React from "react";
 
 export function UserViewTable(props: OrderListViewProps){
-     //TODO 還要可以勾選是不是已經繳錢
      // 做自己的hover
-
     const {onMouseEnter,onMouseLeave,hoverStyle} = useHoverTable();
     return(
         <Table bordered id={props.tableId}>
@@ -30,26 +28,32 @@ export function UserViewTable(props: OrderListViewProps){
                 {props.orderList.map((order: UserOrder,index)=>
                     <React.Fragment key={`${order.user.loginId}-${index}`}>
                     {   
-                        order.orderList.map((goods: GoodsData, i: number)=>{
+                        order.orderList.sort((a,b)=>{
+                            if (a.isNoGoods) return 1
+                            return -1
+                        }).map((goods: GoodsData, i: number)=>{
                             const centerStyle: CSSProperties = {
                                 verticalAlign: 'middle',
                                 textAlign: 'center'
                             }
+                            const isNoGoodsStyle: CSSProperties =(goods.isNoGoods)? {
+                                backgroundColor: 'lightgray',
+                                color: 'gray'
+                            }: {}
                             return (
                                 <tr 
                                     key={`${order.uid}-${i}`}
                                     onMouseEnter={()=>onMouseEnter(index)} 
                                     onMouseLeave={()=>onMouseLeave(index)}
-                                    
+                                    style={isNoGoodsStyle}
                                 >
                                     { (i===0) && <td rowSpan={order.orderList.length} style={{...centerStyle,...hoverStyle(index)}}>{order.user.userName}</td>}                                  
-                                    <td style={{...hoverStyle(index)}}>{`${goods.name}${goods.appendTermText!== '' ?`(${goods.appendTermText})`:''} * ${goods.number}份`}</td>
+                                    <td style={{...hoverStyle(index)}}>{`${goods.isNoGoods? '(缺貨) ':''}${goods.name}${goods.appendTermText!== '' ?`(${goods.appendTermText})`:''} * ${goods.number}份`}</td>
                                     <td style={{...hoverStyle(index)}}>{goods.totalMoney}</td>
                                     <td  style={{...hoverStyle(index)}}>{goods.note}</td>
-                                    {(i===0) && <td rowSpan={order.orderList.length} style={{...centerStyle,...hoverStyle(index)}}>{order.totalMoney - order.appendMoney}</td>}
-                                    {(i===0) && <td rowSpan={order.orderList.length} style={{...centerStyle,...hoverStyle(index)}}>{(order.payMoney === 0)? '' : (order.totalMoney === order.payMoney)? 'V': `${order.payStatus}`}</td>}
+                                    {(i===0) && <td rowSpan={order.orderList.length} style={{...centerStyle,...hoverStyle(index)}}>{ Math.max(order.totalMoney - order.appendMoney, 0 )}</td>}
+                                    {(i===0) && <td rowSpan={order.orderList.length} style={{...centerStyle,...hoverStyle(index)}}>{(order.totalMoney === order.payMoney || order.totalMoney === 0)? 'V': (order.payMoney === 0)? '' :  `${order.payStatus}`}</td>}
                                     {(i===0) && <td rowSpan={order.orderList.length} style={{...centerStyle,...hoverStyle(index)}}>{(order.isReceipted)? 'v' :''}</td>}
-
                                 </tr>
                             )
                         })

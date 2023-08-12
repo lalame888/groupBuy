@@ -17,6 +17,8 @@ export function GoodsViewTable(props: OrderListViewProps){
         const map: {[goodsName: string]: {name: string,list: {[name: string]: {appendText: string, number: number, noteList: Array<string>, money: number}}}}={};
         props.orderList.forEach((userOrder: UserOrder)=>{
             userOrder.orderList.forEach((goods)=>{
+                if (goods.isNoGoods) return;  // 不算已經標示成缺貨的
+
                 if (map[goods.name] === undefined) {
                     map[goods.name] = {list: {},name: goods.name}
                 }
@@ -32,8 +34,6 @@ export function GoodsViewTable(props: OrderListViewProps){
                     )
                 }
             })
-            
-            
         })
         return Object.values(map)
     },[props.orderList])
@@ -71,7 +71,6 @@ export function GoodsViewTable(props: OrderListViewProps){
                             <tr key={`${index}-${i}`} 
                                 onMouseEnter={()=>onMouseEnter(index)} 
                                 onMouseLeave={()=>onMouseLeave(index)}
-                               
                             >
                                 {(i===0) && <td rowSpan={list.length}  style={hoverStyle(index)} >{goods.name}</td>}
                                 <td style={hoverStyle(index)} >{term.appendText}</td>

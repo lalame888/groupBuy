@@ -79,6 +79,7 @@ export function useGroupBuyInfo(groupId: string, isReady: boolean,userInfo: User
     const updatePayState = useCallback(async (updateList: Array<UserOrder>)=>{
         // 有更動的才傳過來
         throw Error('尚未實作') // TODO
+        // TODO 如果有error要繼續throw出去
     },[groupBuyObject])
     
     const updateGroupState = useCallback((type: GroupBuyStatus)=>{

@@ -5,9 +5,9 @@ import { Table } from "react-bootstrap";
 import { CSSProperties } from "react";
 
 
+
 export function UserOverViewTable(props: OrderListViewProps){
-        //TODO 還要可以勾選是不是已經繳錢
-        const keepAllStyle: CSSProperties = {wordBreak: 'keep-all'}
+    const keepAllStyle: CSSProperties = {wordBreak: 'keep-all'}
     return(
         <Table bordered id={props.tableId} hover>
             <thead>
