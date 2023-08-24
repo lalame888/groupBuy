@@ -1,2 +1,2 @@
-export * from './ChildMenu'
-export * from './Header'
+export * from './ChildMenu';
+export * from './Header';

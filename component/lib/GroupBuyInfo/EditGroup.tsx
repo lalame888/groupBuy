@@ -1,9 +1,8 @@
-import { GroupBuyObject } from "@/interface";
+import { GroupBuyObject } from '@/interface';
 
 interface EditGroupProps {
-    groupBuyObject: GroupBuyObject
+  groupBuyObject: GroupBuyObject;
 }
-export  function EditGroup(props: EditGroupProps){
-    
-    return (<div></div>)
+export function EditGroup(props: EditGroupProps) {
+  return <div></div>;
 }

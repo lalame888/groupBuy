@@ -1,3 +1,3 @@
-export *  from './GroupBuyObjectAction'
-export *  from './UserInfoAction'
-export *  from './ViewAction'
+export * from './GroupBuyObjectAction';
+export * from './UserInfoAction';
+export * from './ViewAction';

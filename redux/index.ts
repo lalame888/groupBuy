@@ -1,2 +1,2 @@
-export * from './reducer/index'
-export * from './store/index'
+export * from './reducer/index';
+export * from './store/index';

@@ -1,2 +1,2 @@
-export * from './lib/image'
-export * from './lib/FakeData'
+export * from './lib/image';
+export * from './lib/FakeData';

@@ -1,4 +1,1 @@
-
-export const ViewAction = {
-    
-}
+export const ViewAction = {};

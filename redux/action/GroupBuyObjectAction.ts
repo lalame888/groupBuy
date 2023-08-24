@@ -1,10 +1,6 @@
-import { AppDispatch } from "../store"
-import { StateType } from "../reducer";
+import { AppDispatch } from '../store';
+import { StateType } from '../reducer';
 
-export const GroupBuyObjectAction = {
-    
-}
+export const GroupBuyObjectAction = {};
 
-const InnerAction = {
-    
-}
+const InnerAction = {};

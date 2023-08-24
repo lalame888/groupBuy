@@ -1,1 +1,1 @@
-export * from './GroupBuyListCard'
+export * from './GroupBuyListCard';
