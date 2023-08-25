@@ -1,22 +1,18 @@
 import { GoodsData, ReceiptType, UserOrder } from '@/interface';
 import {
   Button,
-  Col,
   Form,
   FormCheck,
   FormControl,
-  Modal,
   OverlayTrigger,
   Popover,
-  Row,
   Table,
 } from 'react-bootstrap';
-import { CSSProperties, useEffect, useState } from 'react';
+import { CSSProperties } from 'react';
 import { IconButton, MyHoverButton } from '@/component';
 import React from 'react';
 import { useHoverTable } from './useHoverTable';
 import { faTrash, faTrashCanArrowUp } from '@fortawesome/free-solid-svg-icons';
-import styled from 'styled-components';
 import { useOwnerEditUserOrders } from './useOwnerEditUserOrders';
 
 // const StyledIconButton = styled(IconButton)`
@@ -83,7 +79,7 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
           {orderList.map((order: UserOrder, index) => (
             <React.Fragment key={`${order.user.loginId}-${index}`}>
               {order.orderList
-                .sort((a, b) => {
+                .sort((a) => {
                   if (a.isNoGoods) return 1;
                   return -1;
                 })
@@ -116,15 +112,6 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
                             ? `(${goods.appendTermText})`
                             : ''
                         } * ${goods.number}份`}
-                        {!goods.isNoGoods && (
-                          <OwnerEditGoodsButton
-                            disabled={saveDisabled}
-                            goods={goods}
-                            update={() => {
-                              //
-                            }}
-                          />
-                        )}
                       </td>
                       <td style={hoverStyle(index)}>{goods.totalMoney}</td>
                       <td style={hoverStyle(index)}>{goods.note}</td>
@@ -203,20 +190,17 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
                                     fontSize: '14px',
                                     lineHeight: '15px',
                                     display: 'flex',
+                                    justifyContent: 'space-around',
                                   }}
                                 >
-                                  <Button
-                                    onClick={() => {
-                                      document.body.click();
-                                    }}
-                                  >
+                                  <Button onClick={() => document.body.click()}>
                                     取消
                                   </Button>
                                   <Button
                                     disabled={saveDisabled}
-                                    onChange={() => {
-                                      onChange.isNoGoods(order, goods);
-                                    }}
+                                    onChange={() =>
+                                      onChange.isNoGoods(order, goods)
+                                    }
                                     variant="danger"
                                   >
                                     確定
@@ -242,52 +226,6 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
           ))}
         </tbody>
       </Table>
-    </>
-  );
-}
-
-interface OwnerEditGoodsProps {
-  goods: GoodsData;
-  update(goods: GoodsData): void;
-  disabled?: boolean;
-}
-function OwnerEditGoodsButton(props: OwnerEditGoodsProps) {
-  const [isShow, setIsShow] = useState<boolean>(false);
-  const [goods, setGoods] = useState<GoodsData>(props.goods.clone());
-  useEffect(() => {
-    setGoods(props.goods.clone());
-  }, [props.goods]);
-
-  // TODO: 修改原商品金額，或是特製的金額，但項目不能改
-  return (
-    <>
-      <MyHoverButton onClick={() => setIsShow(true)} disabled={props.disabled}>
-        修改
-      </MyHoverButton>
-      {isShow && !props.disabled && (
-        <Modal size="sm">
-          <Modal.Header
-            closeButton
-          >{`修改商品金額: ${goods.name}`}</Modal.Header>
-          <Modal.Body>
-            <Row>
-              <Col sm={3} md={2}>
-                名稱：
-              </Col>
-              <Col sm={9} md={4}>
-                {goods.name}
-              </Col>
-              <Col sm={3} md={2}>
-                金額：
-              </Col>
-              <Col sm={9} md={4}>
-                <FormControl onChange={() => {}} value={goods.money} />
-              </Col>
-            </Row>
-          </Modal.Body>
-          <Modal.Footer></Modal.Footer>
-        </Modal>
-      )}
     </>
   );
 }
