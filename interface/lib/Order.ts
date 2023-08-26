@@ -22,13 +22,13 @@ type UserOrderData = {
 export enum EditOrderAction {
   '已付金額' = 'payMoney',
   '收貨狀態' = 'receipt',
-  '修改商品資訊' = 'editGoods', // 修改單價、修改特製項目、修改是否缺貨
+  '修改商品資訊' = 'editGoods', // 修改是否缺貨
   '修改額外費用' = 'editAppendMoney',
 }
 
 export type EditOrderType = {
   type: EditOrderAction;
-  value: number | ReceiptType | GoodsData;
+  value: number | ReceiptType | GoodsData[];
 };
 
 export class UserOrder extends DataSetter<UserOrder, UserOrderData> {
@@ -76,11 +76,13 @@ export class UserOrder extends DataSetter<UserOrder, UserOrderData> {
       return edit.type === EditOrderAction['修改商品資訊'];
     });
     editList.forEach((edit) => {
-      const newGoods = edit.value as GoodsData;
-      const goodsIndex = list.findIndex((g) => g.uid === newGoods.uid);
-      if (goodsIndex !== -1) {
-        list[goodsIndex] = newGoods;
-      }
+      const newGoods = edit.value as GoodsData[];
+      newGoods.forEach((newGood) => {
+        const goodsIndex = list.findIndex((g) => g.uid === newGood.uid);
+        if (goodsIndex !== -1) {
+          list[goodsIndex] = newGood;
+        }
+      });
     });
     return list;
   }

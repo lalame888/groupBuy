@@ -30,13 +30,12 @@ interface OwnerEditUserOrdersTableProps {
 // TODO: 需考慮到無貨或是漲價的情況
 
 export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
-  //TODO 可以勾選是不是已經繳錢
   const { onMouseEnter, onMouseLeave, hoverStyle } = useHoverTable();
   const { orderList, saveDisabled, onSave, onChange } = useOwnerEditUserOrders(
     props.orderList,
     props.update,
   );
-  // TODO: 使用者編輯自己的清單&清單顯示，要看得到被團主選缺貨的標示 &可以再另外編輯
+  // TODO: 使用者編輯自己的清單&清單顯示，要看得到被團主選;缺貨的標示 &可以再另外編輯
   return (
     <>
       <div
@@ -96,7 +95,6 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
                       key={`${order.uid}-${i}`}
                       onMouseEnter={() => onMouseEnter(index)}
                       onMouseLeave={() => onMouseLeave(index)}
-                      style={isNoGoodsStyle}
                     >
                       {i === 0 && (
                         <td
@@ -106,15 +104,34 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
                           {order.user.userName}
                         </td>
                       )}
-                      <td style={hoverStyle(index)}>
+                      <td
+                        style={{
+                          ...hoverStyle(index),
+                          ...isNoGoodsStyle,
+                        }}
+                      >
                         {`${goods.isNoGoods ? '(缺貨) ' : ''}${goods.name}${
                           goods.appendTermText !== ''
                             ? `(${goods.appendTermText})`
                             : ''
                         } * ${goods.number}份`}
                       </td>
-                      <td style={hoverStyle(index)}>{goods.totalMoney}</td>
-                      <td style={hoverStyle(index)}>{goods.note}</td>
+                      <td
+                        style={{
+                          ...hoverStyle(index),
+                          ...isNoGoodsStyle,
+                        }}
+                      >
+                        {goods.totalMoney}
+                      </td>
+                      <td
+                        style={{
+                          ...hoverStyle(index),
+                          ...isNoGoodsStyle,
+                        }}
+                      >
+                        {goods.note}
+                      </td>
                       {i === 0 && (
                         <td
                           rowSpan={rowSpan}
@@ -199,9 +216,10 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
                                   </Button>
                                   <Button
                                     disabled={saveDisabled}
-                                    onChange={() =>
-                                      onChange.isNoGoods(order, goods)
-                                    }
+                                    onClick={() => {
+                                      onChange.isNoGoods(order, goods);
+                                      document.body.click();
+                                    }}
                                     variant="danger"
                                   >
                                     確定
@@ -217,6 +235,7 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
                           <IconButton
                             disabled={saveDisabled}
                             icon={goods.isNoGoods ? faTrashCanArrowUp : faTrash}
+                            style={{ color: goods.isNoGoods ? 'red' : '' }}
                           />
                         </OverlayTrigger>
                       </td>

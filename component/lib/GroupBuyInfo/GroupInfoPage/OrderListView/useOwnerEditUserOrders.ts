@@ -51,21 +51,22 @@ export function useOwnerEditUserOrders(
           let isCancel = false;
           // 有修改過，要看是不是取消原本的修改
           if (editValue.type === EditOrderAction['修改商品資訊']) {
-            // 包含：標示缺貨 修改金額 修改特製金額
+            //標示缺貨
             // 要針對產品的資訊去判斷是不是取消原本修改
-            const newGoods = editValue.value as GoodsData;
-            const originalGoods = originalOrder.orderList.find(
-              (g) => g.uid === newGoods.uid,
+            const newGoods = editValue.value as GoodsData[];
+            const newEditGoods = [
+              ...(newOrder.editArray[changeIndex].value as GoodsData[]),
+            ];
+            const oldTermIndex = newEditGoods.findIndex(
+              (d) => d.uid === newGoods[0].uid,
             );
-            if (originalGoods) {
-              isCancel =
-                newGoods.isNoGoods === originalGoods.isNoGoods ||
-                newGoods.appendTermText === originalGoods.appendTermText ||
-                newGoods.money === originalGoods.money;
+            if (oldTermIndex !== -1) {
+              newEditGoods.splice(oldTermIndex, 1);
             } else {
-              // 找不到原本的
-              isCancel = true; // 取消改動 => 沒有原本的商品
+              newEditGoods.push(newGoods[0]);
             }
+            editValue.value = newEditGoods;
+            isCancel = newEditGoods.length === 0;
           } else {
             // 包含： 已付款、收貨狀況、額外金額
             isCancel = originalOrder.isCancelChange(
@@ -150,7 +151,7 @@ export function useOwnerEditUserOrders(
       newGoods.isNoGoods = !goods.isNoGoods;
       onChangeOrder(order.uid, {
         type: EditOrderAction['修改商品資訊'],
-        value: newGoods,
+        value: [newGoods],
       });
     },
     [onChangeOrder],

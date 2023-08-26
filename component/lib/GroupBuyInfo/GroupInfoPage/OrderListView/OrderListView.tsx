@@ -40,12 +40,13 @@ export function OrderListView(props: OrderListViewProps) {
   }
   return (
     <div style={{ marginTop: '30px', marginBottom: '60px' }}>
-      <p
+      <div
         style={{
           fontSize: '18px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          marginBottom: '20px',
         }}
       >
         <span style={{ fontSize: '24px' }}>所有人的團單</span>
@@ -127,7 +128,7 @@ export function OrderListView(props: OrderListViewProps) {
             </MyHoverButton>
           )}
         </div>
-      </p>
+      </div>
       {
         // TODO: 要有按鈕讓開團人去編輯、修改、刪除別人的團單
         // 開團人可以設定是不是已經繳錢、繳了多少錢、是不是已經取貨
