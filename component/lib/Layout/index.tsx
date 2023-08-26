@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { MyHoverButton } from '../Button';
 import { Container } from 'react-bootstrap';
 import styled from 'styled-components';
+import { LoadingScreen } from './LoadingScreen';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -49,7 +50,11 @@ export function Layout(props: LayoutProps) {
     );
   } else if (props.status && props.status.loadStatus === LoadStatus['載入中']) {
     // TODO: 顯示載入畫面
-    return <Warper>載入中頁面</Warper>;
+    return (
+      <Warper>
+        <LoadingScreen />
+      </Warper>
+    );
   } else {
     return <Warper>{props.children}</Warper>; // 照常顯示
   }

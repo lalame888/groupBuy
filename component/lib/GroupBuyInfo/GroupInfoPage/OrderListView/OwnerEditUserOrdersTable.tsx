@@ -142,6 +142,7 @@ export function OwnerEditUserOrdersTable(props: OwnerEditUserOrdersTableProps) {
                               style={{ marginRight: '10px', width: '100px' }}
                             />
                             <FormCheck
+                              id={`payMoney-${order.uid}`}
                               label={'已繳'}
                               disabled={saveDisabled}
                               checked={order.payMoney >= order.totalMoney}

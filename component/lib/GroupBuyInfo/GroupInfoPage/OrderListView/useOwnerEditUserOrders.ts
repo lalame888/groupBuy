@@ -29,7 +29,9 @@ export function useOwnerEditUserOrders(
 
   const onChangeOrder = useCallback(
     (uid: string, editValue: EditOrderType) => {
-      const originalOrder = originalOrderList.find((o) => o.uid === uid);
+      const originalOrder: UserOrder | undefined = originalOrderList.find(
+        (o) => o.uid === uid,
+      );
       if (!originalOrder) {
         console.error(`找不到原訂單資訊`);
         return;
@@ -57,17 +59,20 @@ export function useOwnerEditUserOrders(
             );
             if (originalGoods) {
               isCancel =
-                newGoods.isNoGoods !== originalGoods.isNoGoods ||
-                newGoods.appendTermText !== originalGoods.appendTermText ||
-                newGoods.money !== originalGoods.money;
+                newGoods.isNoGoods === originalGoods.isNoGoods ||
+                newGoods.appendTermText === originalGoods.appendTermText ||
+                newGoods.money === originalGoods.money;
             } else {
               // 找不到原本的
               isCancel = true; // 取消改動 => 沒有原本的商品
             }
           } else {
             // 包含： 已付款、收貨狀況、額外金額
-            isCancel =
-              originalOrder[editValue.type as 'receipt'] === editValue.value;
+            isCancel = originalOrder.isCancelChange(
+              editValue.type,
+              editValue.value,
+            );
+            originalOrder[editValue.type as 'receipt'] === editValue.value;
           }
 
           if (isCancel) {
@@ -78,7 +83,7 @@ export function useOwnerEditUserOrders(
             newOrder.editArray[changeIndex] = editValue;
           }
         }
-
+        console.log(newOrder);
         const newList = [...oldList];
         newList[orderIndex] = newOrder;
         return newList;

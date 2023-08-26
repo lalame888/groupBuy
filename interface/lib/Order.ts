@@ -65,6 +65,11 @@ export class UserOrder extends DataSetter<UserOrder, UserOrderData> {
     });
     return new UserOrder(data.user, { ...data, orderList: orders });
   }
+  public isCancelChange(type: EditOrderAction, value: any): boolean {
+    // 回傳與修改前的數值是否相同
+    return this.dataGetter(type as keyof UserOrderData) === value;
+  }
+
   get orderList(): Array<GoodsData> {
     const list = [...(this.dataGetter('orderList') as Array<GoodsData>)];
     const editList = this.editArray.filter((edit) => {
