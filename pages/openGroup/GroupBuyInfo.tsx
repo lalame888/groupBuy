@@ -23,7 +23,6 @@ export default function GroupBuyInfo() {
     update,
     myOrder,
     loadingLock, // update中 按鈕要鎖起來
-    errorMessage, // TODO: 可能是變更團單發生失敗等等，是update的失敗
   } = useGroupBuyInfo(groupId, router.isReady, userInfo);
   const props: GroupPageProps = {
     groupBuyObject: groupBuyObject as GroupBuyObject,

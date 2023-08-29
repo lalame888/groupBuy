@@ -32,7 +32,7 @@ export function OrderListView(props: OrderListViewProps) {
 
   async function updatePayState(updateList: Array<UserOrder>) {
     try {
-      await props.updatePayState(updateList);
+      if (updateList.length > 0) await props.updatePayState(updateList);
       setIsEditPayState(false);
     } catch (error) {
       // TODO: 顯示錯誤訊息

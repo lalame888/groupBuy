@@ -40,7 +40,7 @@ type ThemeType = {
   lightgray: HoverThemeType;
 };
 export const MyHoverButton = forwardRef<HTMLSpanElement, HoverButtonProps>(
-  (props, ref) => {
+  (props) => {
     const linkRef = useRef<HTMLAnchorElement>(null);
     const themes: ThemeType = {
       green: {

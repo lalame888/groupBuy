@@ -152,6 +152,19 @@ export class ServerUtils {
     });
   }
 
+  public async updateUserOrder(userOrders: Array<UserOrder>, uid: string) {
+    // 針對userOrders 中editArray的部分去做更改
+    // 新的orderList => 直接拿出來就是整併過的
+    const orginal = await this.loadUserOrderList(uid);
+    userOrders.forEach((order) => {
+      const oldOrder = orginal.find((o) => o.uid === order.uid);
+      if (oldOrder) {
+        oldOrder.orderList = order.orderList;
+        oldOrder.editArray = [];
+      }
+    });
+  }
+
   public addLog(
     message: string,
     logLevel: LoggingLevel,

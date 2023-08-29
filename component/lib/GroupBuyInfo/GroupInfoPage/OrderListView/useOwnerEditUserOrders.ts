@@ -25,6 +25,7 @@ export function useOwnerEditUserOrders(
       throw new Error(`${error}`);
     }
     setSaveDisabled(false);
+    return;
   }, [update, orderList]);
 
   const onChangeOrder = useCallback(

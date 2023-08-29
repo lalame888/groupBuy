@@ -47,9 +47,10 @@ export function useGroupBuyInfo(
     } else {
       return {
         loadStatus: LoadStatus['載入成功'],
+        errorMessage: errorMessage,
       };
     }
-  }, [groupBuyObject]);
+  }, [groupBuyObject, errorMessage]);
   const [loadingLock, setLoadingLock] = useState<boolean>(false);
 
   const myOrder: UserOrder | undefined = useMemo(() => {
@@ -101,9 +102,13 @@ export function useGroupBuyInfo(
   // === 更動狀態的function ===
   const updatePayState = useCallback(
     async (updateList: Array<UserOrder>) => {
-      // 有更動的才傳過來
-      throw Error('尚未實作'); // TODO
-      // TODO 如果有error要繼續throw出去
+      if (groupBuyObject) {
+        // 有更動的才傳過來
+        await serverUtils.updateUserOrder(updateList, groupBuyObject?.uid);
+        if (mounted.current) {
+          loadGroupBuy(groupId); // 重新載入
+        }
+      }
     },
     [groupBuyObject],
   );
@@ -290,6 +295,5 @@ export function useGroupBuyInfo(
       saveOrder,
       receiptOrder,
     },
-    errorMessage,
   };
 }

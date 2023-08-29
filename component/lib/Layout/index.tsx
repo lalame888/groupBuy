@@ -2,7 +2,7 @@ import { LoadStatus, UserInfo } from '@/interface';
 import { useReduxSelector } from '@/redux';
 import { useEffect } from 'react';
 import { MyHoverButton } from '../Button';
-import { Container } from 'react-bootstrap';
+import { Alert, Container } from 'react-bootstrap';
 import styled from 'styled-components';
 import { LoadingScreen } from './LoadingScreen';
 
@@ -56,6 +56,15 @@ export function Layout(props: LayoutProps) {
       </Warper>
     );
   } else {
-    return <Warper>{props.children}</Warper>; // 照常顯示
+    return (
+      <Warper>
+        {props.status?.errorMessage && (
+          <div style={{ margin: '10px' }}>
+            <Alert>{props.status.errorMessage}</Alert>
+          </div>
+        )}
+        {props.children}
+      </Warper>
+    ); // 照常顯示
   }
 }

@@ -8,6 +8,7 @@ import {
   PaginationSelector,
   SearchInput,
   GroupBuyListCard,
+  GroupListEmpty,
 } from '@/component';
 
 export default function NowGroup() {
@@ -27,31 +28,37 @@ export default function NowGroup() {
   return (
     <Layout status={{ loadStatus, errorMessage }} shouldLoginTurnToHome>
       <ChildMenu />
-      <div style={searchDivStyle}>
-        <MyHoverButton
-          theme="green"
-          style={{ minWidth: '110px', marginRight: '20px' }}
-          to={`/NewOpen`}
-        >
-          ＋開新團
-        </MyHoverButton>
-        <div style={{ display: 'flex' }}>
-          <SearchInput
-            onChange={(newValue: string) => searchInput.set(newValue)}
-            value={searchInput.value}
-          />
-          <PaginationSelector
-            nowPageNumber={pageNumber}
-            maxPageNumber={maxPage}
-            setPageNumber={setPageNumber}
-          />
-        </div>
-      </div>
-      <div>
-        {showList.map((object: GroupBuyObject) => (
-          <GroupBuyListCard key={object.uid} groupBuyObject={object} />
-        ))}
-      </div>
+      {showList.length > 0 ? (
+        <>
+          <div style={searchDivStyle}>
+            <MyHoverButton
+              theme="green"
+              style={{ minWidth: '110px', marginRight: '20px' }}
+              to={`/NewOpen`}
+            >
+              ＋開新團
+            </MyHoverButton>
+            <div style={{ display: 'flex' }}>
+              <SearchInput
+                onChange={(newValue: string) => searchInput.set(newValue)}
+                value={searchInput.value}
+              />
+              <PaginationSelector
+                nowPageNumber={pageNumber}
+                maxPageNumber={maxPage}
+                setPageNumber={setPageNumber}
+              />
+            </div>
+          </div>
+          <div>
+            {showList.map((object: GroupBuyObject) => (
+              <GroupBuyListCard key={object.uid} groupBuyObject={object} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <GroupListEmpty />
+      )}
     </Layout>
   );
 }
