@@ -19,7 +19,7 @@ export class PageRoute {
       case PageState['瀏覽商家']:
         return [
           { pageName: '搜尋商家', page: 'SearchStore', isDefault: true },
-          { pageName: '收藏商家', page: 'StoreStore' },
+          { pageName: '收藏商家', page: 'FavoriteStore' },
         ];
       default:
         return [];

@@ -21,9 +21,7 @@ export class UserInfo extends Cloneable<UserInfo> implements UserInfoJSON {
   }
 
   public isFavoriteStore(uid: string): boolean {
-    return (
-      this.favoriteStoreUidList.findIndex((storeUid) => storeUid === uid) !== -1
-    );
+    return this.favoriteStoreUidList.includes(uid);
   }
   get userData(): UserData {
     return {

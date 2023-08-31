@@ -6,14 +6,15 @@ import { Alert, Container } from 'react-bootstrap';
 import styled from 'styled-components';
 import { LoadingScreen } from './LoadingScreen';
 
+export type PageStatus = {
+  loadStatus: LoadStatus;
+  errorMessage?: string; // 是否有錯誤訊息，如果狀態為失敗＆有錯誤訊息顯示錯誤訊息
+};
 interface LayoutProps {
   children: React.ReactNode;
   shouldLogin?: boolean; // 是否應該登入，沒有登入顯示固定的資訊&前往登入的按鈕
   shouldLoginTurnToHome?: boolean; // 沒有登入的時候直接返回登入入口
-  status?: {
-    loadStatus: LoadStatus;
-    errorMessage?: string; // 是否有錯誤訊息，如果狀態為失敗＆有錯誤訊息顯示錯誤訊息
-  };
+  status?: PageStatus;
 }
 const Warper = styled(Container)`
   max-width: 900px;

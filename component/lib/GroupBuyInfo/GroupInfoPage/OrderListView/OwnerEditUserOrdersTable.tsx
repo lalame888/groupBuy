@@ -15,13 +15,6 @@ import { useHoverTable } from './useHoverTable';
 import { faTrash, faTrashCanArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useOwnerEditUserOrders } from './useOwnerEditUserOrders';
 
-// const StyledIconButton = styled(IconButton)`
-//     color: 'gray';
-//     &:hover {
-//         color: red;
-//     }
-// `
-
 interface OwnerEditUserOrdersTableProps {
   orderList: Array<UserOrder>;
   update(updateList: Array<UserOrder>): Promise<void>;

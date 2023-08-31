@@ -2,10 +2,10 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { Action, Dispatch, applyMiddleware, createStore } from 'redux';
 import thunkMiddleware, { ThunkDispatch } from 'redux-thunk';
 
-import { groupBuyReducer } from '../reducer/index';
+import { userInfoReducer } from '../reducer/index';
 
 export const groupBuyStore = createStore(
-  groupBuyReducer,
+  userInfoReducer,
   applyMiddleware(thunkMiddleware),
 );
 

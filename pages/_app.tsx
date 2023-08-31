@@ -3,8 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'cropperjs/dist/cropper.css';
 
 import { AppProps } from 'next/app';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-
 import { StrictMode, useEffect } from 'react';
 import { UserInfoAction } from '@/redux/action';
 import { Provider } from 'react-redux';

@@ -6,22 +6,22 @@ import {
   LoggingLevel,
   MenuData,
   ReceiptType,
-  StoreData,
   StoreObject,
   UserInfo,
   UserOrder,
 } from '@/interface';
-import axios, { AxiosInstance, AxiosResponse, CancelTokenSource } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import {
-  groupBuyData1,
   groupBuyObject1,
   groupBuyObject2,
   myUser,
+  myUserFavoriteStoreUidList,
   userOrder,
   userOrder2,
 } from '@/data';
 import { getTimeString } from '@/utils';
 
+// TODO: 每次出發之前要先確認一下user資訊是否還相同？
 export class ServerUtils {
   private JWT: string | null = '';
   constructor(public apiUrl = './api/') {
@@ -37,13 +37,13 @@ export class ServerUtils {
   }
   public async checkLogin(): Promise<UserInfo | null> {
     const result = myUser.clone();
-    const storeUidList = await this.loadFavoriteStoreUidList(result);
+    const storeUidList = await this.loadFavoriteStoreUidList();
     result.favoriteStoreUidList = storeUidList;
     localStorage.setItem('token', '0000'); //test用
     return Promise.resolve(myUser.clone());
   }
-  public loadFavoriteStoreUidList(userInfo: UserInfo): Promise<Array<string>> {
-    return Promise.resolve([]);
+  public loadFavoriteStoreUidList(): Promise<Array<string>> {
+    return Promise.resolve(myUserFavoriteStoreUidList);
   }
   public loadUserGroupBuyList(
     type: 'now' | 'history',
@@ -163,6 +163,21 @@ export class ServerUtils {
         oldOrder.editArray = [];
       }
     });
+  }
+  public async updateFavoriteStore(isAdd: boolean, storeUid: string) {
+    const index = myUserFavoriteStoreUidList.indexOf(storeUid);
+
+    if (isAdd) {
+      if (index === -1) myUserFavoriteStoreUidList.push(storeUid);
+    } else {
+      if (index !== -1) myUserFavoriteStoreUidList.splice(index, 1);
+    }
+  }
+
+  public async loadStoreList(type: 'favorite' | 'search', searchText?: string) {
+    // 如果沒有searchText 就給一些推薦
+    if (type === 'favorite') return []; // TODO: 邏輯
+    else return [];
   }
 
   public addLog(

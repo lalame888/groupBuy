@@ -1,4 +1,4 @@
 import { ChildMenu } from '@/component';
-export default function H() {
+export default function StoreInfo() {
   return <ChildMenu />;
 }

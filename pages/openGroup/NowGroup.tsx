@@ -1,24 +1,18 @@
 import { GroupBuyObject } from '@/interface/lib/GroupBuyObject';
 import { CSSProperties } from 'react';
-import { useGroupBuyList } from './utils/useNowGroupBuy';
+import { useGroupBuyList } from './utils/useGroupBuyList';
 import {
   ChildMenu,
   Layout,
   MyHoverButton,
-  PaginationSelector,
-  SearchInput,
   GroupBuyListCard,
   GroupListEmpty,
+  SearchPagination,
 } from '@/component';
 
 export default function NowGroup() {
-  const {
-    errorMessage,
-    showList,
-    loadStatus,
-    pagination: { maxPage, pageNumber, setPageNumber },
-    searchInput,
-  } = useGroupBuyList('now');
+  const { showList, pageStatus, pagination, searchInput } =
+    useGroupBuyList('now');
   const searchDivStyle: CSSProperties = {
     display: 'flex',
     justifyContent: 'space-between',
@@ -26,7 +20,7 @@ export default function NowGroup() {
   };
 
   return (
-    <Layout status={{ loadStatus, errorMessage }} shouldLoginTurnToHome>
+    <Layout status={pageStatus} shouldLoginTurnToHome>
       <ChildMenu />
       {showList.length > 0 ? (
         <>
@@ -38,17 +32,10 @@ export default function NowGroup() {
             >
               ＋開新團
             </MyHoverButton>
-            <div style={{ display: 'flex' }}>
-              <SearchInput
-                onChange={(newValue: string) => searchInput.set(newValue)}
-                value={searchInput.value}
-              />
-              <PaginationSelector
-                nowPageNumber={pageNumber}
-                maxPageNumber={maxPage}
-                setPageNumber={setPageNumber}
-              />
-            </div>
+            <SearchPagination
+              searchInput={searchInput}
+              pagination={pagination}
+            />
           </div>
           <div>
             {showList.map((object: GroupBuyObject) => (

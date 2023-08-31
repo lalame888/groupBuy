@@ -1,5 +1,4 @@
 import {
-  GoodsData,
   GroupBuyObject,
   GroupBuyStatus,
   LoadGroupData,
@@ -13,7 +12,6 @@ import {
 export const myUser: UserInfo = new UserInfo('韻儒', 'lalame888');
 myUser.favoriteStoreUidList = [];
 export const anotherUser: UserInfo = new UserInfo('使用者A', 'groupBuy123');
-
 const coverImage = '../assets/S__113475591.jpg';
 const menuImage = '../assets/S__113475595.jpg';
 const storeData1: Partial<StoreData> = {
@@ -113,3 +111,5 @@ export const groupBuyObject1 = GroupBuyObject.loadObject(groupBuyData1);
 export const groupBuyObject2 = new GroupBuyObject(anotherUser.userData, {
   title: '團購2',
 });
+
+export const myUserFavoriteStoreUidList = [store1.uid];

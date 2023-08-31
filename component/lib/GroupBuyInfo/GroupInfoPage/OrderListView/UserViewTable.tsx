@@ -31,7 +31,7 @@ export function UserViewTable(props: OrderListViewProps) {
         {props.orderList.map((order: UserOrder, index) => (
           <React.Fragment key={`${order.user.loginId}-${index}`}>
             {order.orderList
-              .sort((a, b) => {
+              .sort((a) => {
                 if (a.isNoGoods) return 1;
                 return -1;
               })
@@ -51,25 +51,28 @@ export function UserViewTable(props: OrderListViewProps) {
                     key={`${order.uid}-${i}`}
                     onMouseEnter={() => onMouseEnter(index)}
                     onMouseLeave={() => onMouseLeave(index)}
-                    style={isNoGoodsStyle}
                   >
                     {i === 0 && (
                       <td
                         rowSpan={order.orderList.length}
-                        style={{ ...centerStyle, ...hoverStyle(index) }}
+                        style={hoverStyle(index, 'center')}
                       >
                         {order.user.userName}
                       </td>
                     )}
-                    <td style={{ ...hoverStyle(index) }}>{`${
+                    <td style={{ ...hoverStyle(index), ...isNoGoodsStyle }}>{`${
                       goods.isNoGoods ? '(缺貨) ' : ''
                     }${goods.name}${
                       goods.appendTermText !== ''
                         ? `(${goods.appendTermText})`
                         : ''
                     } * ${goods.number}份`}</td>
-                    <td style={{ ...hoverStyle(index) }}>{goods.totalMoney}</td>
-                    <td style={{ ...hoverStyle(index) }}>{goods.note}</td>
+                    <td style={{ ...hoverStyle(index), ...isNoGoodsStyle }}>
+                      {goods.totalMoney}
+                    </td>
+                    <td style={{ ...hoverStyle(index), ...isNoGoodsStyle }}>
+                      {goods.note}
+                    </td>
                     {i === 0 && (
                       <td
                         rowSpan={order.orderList.length}
