@@ -40,7 +40,7 @@ type ThemeType = {
   lightgray: HoverThemeType;
 };
 export const MyHoverButton = forwardRef<HTMLSpanElement, HoverButtonProps>(
-  (props) => {
+  (props, ref) => {
     const linkRef = useRef<HTMLAnchorElement>(null);
     const themes: ThemeType = {
       green: {
@@ -78,7 +78,13 @@ export const MyHoverButton = forwardRef<HTMLSpanElement, HoverButtonProps>(
 
     return (
       <>
-        <HoverButton variant="light" {...props} theme={theme} onClick={onClick}>
+        <HoverButton
+          ref={ref}
+          variant="light"
+          {...props}
+          theme={theme}
+          onClick={onClick}
+        >
           {props.children}
         </HoverButton>
         <Link style={{ display: 'none' }} href={props.to || ''} ref={linkRef} />
