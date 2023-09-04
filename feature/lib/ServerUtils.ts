@@ -184,6 +184,7 @@ export class ServerUtils {
       return list.filter((s) => userStoreUidList.includes(s.uid));
     }
     if (!searchText || searchText.trim() === '') return list;
+    console.log(searchText);
     return list.filter(
       (s: StoreObject) =>
         s.name.toLowerCase().includes(searchText.toLowerCase()) ||

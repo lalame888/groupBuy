@@ -51,7 +51,7 @@ export function useList<T>(
         serverUtils.addLog(message, LoggingLevel['ERROR']);
       }
     }
-  }, []);
+  }, [loadFunction]);
 
   useEffect(() => {
     setPageNumber(1);

@@ -1,6 +1,7 @@
 import { changeWeekToCh, generateUUID } from '@/utils';
 import { DataSetter } from './DataSetter';
 import { MenuData } from './Menu';
+import { UserData } from './UserInfo';
 
 export type WeekDay = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type BusinessHours = {
@@ -24,6 +25,7 @@ export type StoreData = {
   businessHours: Array<BusinessHours>; // 營業時間
   menuData: Array<MenuData> | undefined; // 菜單資訊 (一開始有可能不拿)
   setting: StoreSetting;
+  builder: UserData | undefined;
 };
 // TODO: 還沒有存menu
 // 流程上：去找店家資訊，拿店家uid找menu，然後再結合創造 StoreObject
@@ -43,6 +45,7 @@ export class StoreObject extends DataSetter<StoreObject, StoreData> {
       setting: {
         editable: true,
       },
+      builder: undefined,
     };
     super({ ...initSetting, ...data });
   }
@@ -110,5 +113,9 @@ export class StoreObject extends DataSetter<StoreObject, StoreData> {
   }
   get uid(): string {
     return this.dataGetter('uid') as string;
+  }
+  get builderId(): string {
+    const builder = this.dataGetter('builder') as UserData | undefined;
+    return builder?.loginId || '';
   }
 }

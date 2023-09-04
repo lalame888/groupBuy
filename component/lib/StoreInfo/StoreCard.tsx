@@ -14,8 +14,14 @@ interface StoreCardProps {
 }
 
 export function StoreCard(props: StoreCardProps) {
-  const { isLogin, isFavoriteStore, loading, toggleFavorite, errorMessage } =
-    useStoreCard(props.store);
+  const {
+    isLogin,
+    isFavoriteStore,
+    loading,
+    toggleFavorite,
+    errorMessage,
+    isBuilder,
+  } = useStoreCard(props.store);
 
   const infoDivStyle: CSSProperties = {
     margin: '0px 30px',
@@ -61,15 +67,17 @@ export function StoreCard(props: StoreCardProps) {
         </div>
         <div style={buttonDivStyle}>
           <MyHoverButton
+            size="long"
             style={buttonStyle}
             to={`/StorePage/StoreInfo?id=${props.store.uid}`}
           >
             查看詳細
           </MyHoverButton>
-          {isLogin && (
+          {isLogin && !isBuilder && (
             <MyHoverButton
               disabled={loading}
               style={buttonStyle}
+              size="long"
               onClick={toggleFavorite}
             >
               {isFavoriteStore ? (
@@ -89,6 +97,7 @@ export function StoreCard(props: StoreCardProps) {
           )}
           <MyHoverButton
             style={buttonStyle}
+            size="long"
             onClick={() => {
               // TODO
             }}

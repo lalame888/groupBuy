@@ -49,5 +49,6 @@ export function useStoreCard(store: StoreObject) {
     loading,
     toggleFavorite,
     errorMessage,
+    isBuilder: userInfo?.loginId === store.builderId,
   };
 }
