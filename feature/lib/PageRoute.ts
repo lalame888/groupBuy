@@ -20,6 +20,7 @@ export class PageRoute {
         return [
           { pageName: '搜尋商家', page: 'SearchStore', isDefault: true },
           { pageName: '收藏商家', page: 'FavoriteStore' },
+          { pageName: '新增商家', page: 'AddStore' },
         ];
       default:
         return [];

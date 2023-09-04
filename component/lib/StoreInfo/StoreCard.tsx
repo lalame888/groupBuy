@@ -82,7 +82,7 @@ export function StoreCard(props: StoreCardProps) {
                 </span>
               ) : (
                 <span>
-                  收藏 <FontAwesomeIcon icon={faHeart} />
+                  收　藏 <FontAwesomeIcon icon={faHeart} />
                 </span>
               )}
             </MyHoverButton>

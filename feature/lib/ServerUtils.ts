@@ -16,6 +16,7 @@ import {
   groupBuyObject2,
   myUser,
   myUserFavoriteStoreUidList,
+  store1,
   userOrder,
   userOrder2,
 } from '@/data';
@@ -36,11 +37,11 @@ export class ServerUtils {
     });
   }
   public async checkLogin(): Promise<UserInfo | null> {
-    const result = myUser.clone();
+    const result = myUser;
     const storeUidList = await this.loadFavoriteStoreUidList();
     result.favoriteStoreUidList = storeUidList;
     localStorage.setItem('token', '0000'); //test用
-    return Promise.resolve(myUser.clone());
+    return Promise.resolve(myUser);
   }
   public loadFavoriteStoreUidList(): Promise<Array<string>> {
     return Promise.resolve(myUserFavoriteStoreUidList);
@@ -176,8 +177,20 @@ export class ServerUtils {
 
   public async loadStoreList(type: 'favorite' | 'search', searchText?: string) {
     // 如果沒有searchText 就給一些推薦
-    if (type === 'favorite') return []; // TODO: 邏輯
-    else return [];
+    const list: Array<StoreObject> = [store1];
+
+    if (type === 'favorite') {
+      const userStoreUidList = await this.loadFavoriteStoreUidList();
+      return list.filter((s) => userStoreUidList.includes(s.uid));
+    }
+    if (!searchText || searchText.trim() === '') return list;
+    return list.filter(
+      (s: StoreObject) =>
+        s.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        s.menuData?.some((v) =>
+          v.name.toLowerCase().includes(searchText.toLowerCase()),
+        ),
+    );
   }
 
   public addLog(

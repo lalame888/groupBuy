@@ -21,9 +21,10 @@ export function ChildMenu(props: ChildMenuProps) {
 
   return (
     <div style={menuStyle}>
-      {pageMenu.map((child) => {
+      {pageMenu.map((child, index) => {
         return (
           <ChildMenuButton
+            index={index}
             key={child.pageName}
             buttonText={child.pageName}
             to={child.page}
@@ -36,6 +37,7 @@ export function ChildMenu(props: ChildMenuProps) {
 }
 
 interface ChildMenuButtonProps {
+  index: number;
   style?: CSSProperties;
   buttonText: string;
   to: string;
@@ -50,6 +52,7 @@ export function ChildMenuButton(props: ChildMenuButtonProps) {
     justifyContent: 'center',
     padding: '15px 20px',
     border: THEME.border,
+    borderLeft: props.index > 0 ? 'none' : THEME.border,
     cursor: 'pointer',
     fontSize: '14px',
     color: '#212529',

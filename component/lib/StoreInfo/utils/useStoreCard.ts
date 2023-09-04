@@ -13,9 +13,10 @@ export function useStoreCard(store: StoreObject) {
   const dispatch = useDispatch();
 
   const isFavoriteStore = useMemo(() => {
+    console.log(userInfo?.favoriteStoreUidList);
     if (!userInfo) return false;
     return userInfo.isFavoriteStore(store.uid);
-  }, [userInfo?.favoriteStoreUidList, store.uid]);
+  }, [userInfo, store.uid]);
 
   const toggleFavorite = useCallback(async () => {
     if (loading || !userInfo) return;
@@ -23,6 +24,7 @@ export function useStoreCard(store: StoreObject) {
     try {
       // 去更新收藏狀態
       await serverUtils.updateFavoriteStore(!isFavoriteStore, store.uid);
+      console.log(!isFavoriteStore);
       // 取得最新的userList
       const newList = await serverUtils.loadFavoriteStoreUidList();
       // 如果登入狀態沒有更變，就把最新的userList塞進reduce內
