@@ -26,7 +26,11 @@ export function MyInput(props: MyInputProps) {
   };
 
   return (
-    <Form noValidate style={{ width: '100%' }}>
+    <Form
+      noValidate
+      style={{ width: '100%' }}
+      onSubmit={(event) => event.preventDefault()}
+    >
       <Form.Group controlId={props.id} style={{ position: 'relative' }}>
         <Form.Control
           ref={props.forwardRef}

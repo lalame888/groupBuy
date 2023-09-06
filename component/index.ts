@@ -6,5 +6,5 @@ export * from './lib/GroupBuyCard/index';
 export * from './lib/GroupBuyInfo/index';
 export * from './lib/Other';
 export * from './lib/Image';
-export * from './lib/StoreInfo';
+export * from './lib/StorePage';
 export * from './lib/Card';

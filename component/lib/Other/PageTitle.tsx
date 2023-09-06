@@ -14,6 +14,7 @@ export function PageTitle(props: PageTitleProps) {
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingBottom: '10px',
+    marginBottom: '20px',
     ...props.style,
   };
   return (

@@ -2,7 +2,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CSSProperties, forwardRef } from 'react';
 
-interface IconButtonProps {
+export interface IconButtonProps {
   icon: IconProp;
   style?: CSSProperties;
   onClick?(): void;

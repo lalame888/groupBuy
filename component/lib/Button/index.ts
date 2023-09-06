@@ -5,3 +5,5 @@ export * from './ShareGroupButton';
 export * from './BackButton';
 export * from './Carousels';
 export * from './ExportPdfButton';
+export * from './NoDataButton';
+export * from './DeleteButton';

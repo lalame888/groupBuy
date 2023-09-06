@@ -22,6 +22,7 @@ const storeData1: Partial<StoreData> = {
   menuImage: [coverImage, menuImage],
 };
 export const store1: StoreObject = new StoreObject(storeData1);
+export const storeList: Array<StoreObject> = [store1];
 const 涼麵大JSON = {
   name: '涼麵（大）',
   money: 65,

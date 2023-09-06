@@ -12,7 +12,6 @@ export function useStoryInfoList(
     (state) => state.userInfo,
   ) as UserInfo | null;
   const loadFunction = useCallback(() => {
-    console.log(searchText);
     return serverUtils.loadStoreList(type, searchText);
   }, [type, searchText]);
   const inputFilter = useCallback((item: StoreObject, searchName: string) => {

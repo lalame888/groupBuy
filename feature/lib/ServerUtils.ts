@@ -16,7 +16,7 @@ import {
   groupBuyObject2,
   myUser,
   myUserFavoriteStoreUidList,
-  store1,
+  storeList,
   userOrder,
   userOrder2,
 } from '@/data';
@@ -177,14 +177,12 @@ export class ServerUtils {
 
   public async loadStoreList(type: 'favorite' | 'search', searchText?: string) {
     // 如果沒有searchText 就給一些推薦
-    const list: Array<StoreObject> = [store1];
-
+    const list = [...storeList];
     if (type === 'favorite') {
       const userStoreUidList = await this.loadFavoriteStoreUidList();
       return list.filter((s) => userStoreUidList.includes(s.uid));
     }
     if (!searchText || searchText.trim() === '') return list;
-    console.log(searchText);
     return list.filter(
       (s: StoreObject) =>
         s.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -192,6 +190,29 @@ export class ServerUtils {
           v.name.toLowerCase().includes(searchText.toLowerCase()),
         ),
     );
+  }
+  public async saveStore(store: StoreObject): Promise<void> {
+    storeList.push(store);
+  }
+  public uploadImageFile(
+    imageFile: File,
+    setUploadProcess: (process: number) => void,
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const updateMs = 100;
+      const fakeUploadProcess = (times = 1) => {
+        const nowProcess = Math.min(times * 1.5);
+        setUploadProcess(nowProcess);
+        if (nowProcess < 100) {
+          setTimeout(() => {
+            fakeUploadProcess(times + 1);
+          }, updateMs);
+        } else {
+          resolve(URL.createObjectURL(imageFile));
+        }
+      };
+      setTimeout(fakeUploadProcess, updateMs);
+    });
   }
 
   public addLog(

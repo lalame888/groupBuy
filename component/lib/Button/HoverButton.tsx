@@ -4,7 +4,7 @@ import React, { CSSProperties, forwardRef, useRef } from 'react';
 import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
-interface HoverButtonProps {
+export interface HoverButtonProps {
   to?: string;
   theme?: 'green' | 'lightgray';
   size?: 'long';
