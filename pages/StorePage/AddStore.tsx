@@ -8,13 +8,15 @@ import {
   StoreImageUpload,
   UploadMenuImageButton,
 } from '@/component';
-import { CSSProperties, useState } from 'react';
+import { CSSProperties } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useAddStore } from './utils/useAddStore';
 import { MenuCanvas } from '@/component/lib/Image/MenuCanvas';
+import { useRouter } from 'next/router';
 
 export default function AddStore() {
-  const initName = ''; // TODO 從網址參數拿
+  const router = useRouter();
+  const initName = (router.query.search as string) || ''; // 從網址參數拿
   const { state, set, isSaving, showInvalid, errorMessage, saveStore } =
     useAddStore(initName);
   const style: CSSProperties = {
@@ -67,11 +69,6 @@ export default function AddStore() {
                   set.setAddress(address);
                 }}
                 inputValue={state.address}
-                isValidMessage={
-                  showInvalid && state.address.trim() === ''
-                    ? '請輸入店家地址'
-                    : ''
-                }
               />
             </p>
             <p style={rowStyle}>
@@ -82,14 +79,8 @@ export default function AddStore() {
                   set.setPhone(phone);
                 }}
                 inputValue={state.phone}
-                isValidMessage={
-                  showInvalid && state.phone.trim() === ''
-                    ? '請輸入店家電話'
-                    : ''
-                }
               />
             </p>
-
             <StoreBusinessTime
               time={state.businessHours}
               setTimeData={set.setBusinessHours}

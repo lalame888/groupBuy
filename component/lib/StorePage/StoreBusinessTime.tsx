@@ -1,57 +1,24 @@
-import { BusinessHours, WeekDay } from '@/interface';
+import { BusinessHours } from '@/interface';
 import { changeWeekToCh } from '@/utils';
 import { faPlusCircle, faMinus } from '@fortawesome/free-solid-svg-icons';
-import { CSSProperties } from 'react';
+import { CSSProperties, Dispatch, SetStateAction } from 'react';
 import { Table, FormCheck } from 'react-bootstrap';
 import { IconButton } from '../Button';
 import { MyInput } from '../Input';
+import { useStoreBusinessTime } from './utils/useStoreBusinessTime';
 
 interface StoreBusinessTimeProps {
   style?: CSSProperties;
-  setTimeData(time: Array<BusinessHours>): void;
+  setTimeData: Dispatch<SetStateAction<BusinessHours[]>>;
   time: Array<BusinessHours>;
 }
 const tdStyle: CSSProperties = {
   textAlign: 'center',
 };
 export function StoreBusinessTime(props: StoreBusinessTimeProps) {
-  function updateBusinessTime(data: BusinessHours) {
-    const newTime = [...props.time];
-    const index = newTime.findIndex((t) => t.day === data.day);
+  const { onIsHolidayChange, onOpenTimeChange, onOpenTimeAdd, showData } =
+    useStoreBusinessTime(props.setTimeData, props.time);
 
-    if (index !== -1) {
-      // 直接更新進去
-      newTime[index] = { ...data };
-    } else {
-      newTime.push(data);
-    }
-    props.setTimeData(newTime);
-  }
-  function onIsHolidayChange(
-    day: WeekDay,
-    checked: boolean,
-    propsTime: BusinessHours | undefined,
-  ) {
-    const openTime = propsTime ? propsTime.openTime : [];
-    updateBusinessTime({ day, openTime, isHoliday: checked });
-  }
-  function onOpenTimeChange(
-    day: WeekDay,
-    value: Array<string>,
-    propsTime: BusinessHours | undefined,
-  ) {
-    updateBusinessTime({
-      day,
-      openTime: value,
-      isHoliday: propsTime?.isHoliday || false,
-    });
-  }
-  function onOpenTimeAdd(propsTime: BusinessHours | undefined) {
-    if (propsTime) {
-      const openTime = [...propsTime.openTime, ''];
-      updateBusinessTime({ ...propsTime, openTime });
-    }
-  }
   const style: CSSProperties = {
     ...props.style,
   };
@@ -66,12 +33,9 @@ export function StoreBusinessTime(props: StoreBusinessTimeProps) {
           </tr>
         </thead>
         <tbody>
-          {Array.from(Array(7)).map((t, index) => {
-            const day = (index + 1) as WeekDay;
-            const propsTime = props.time.find((t) => t.day === day);
-            const rowSpan = propsTime?.isHoliday
-              ? 1
-              : propsTime?.openTime.length || 1;
+          {showData.map((data) => {
+            const { day, isHoliday, mainTime, otherTime } = data;
+            const rowSpan = otherTime.length + 1;
             return (
               <>
                 <tr key={day}>
@@ -80,75 +44,60 @@ export function StoreBusinessTime(props: StoreBusinessTimeProps) {
                   </td>
                   <td style={{ display: 'flex' }}>
                     <MyInput
-                      disabled={propsTime?.isHoliday}
-                      inputValue={
-                        propsTime?.isHoliday
-                          ? ''
-                          : propsTime && propsTime.openTime[0]
-                          ? propsTime.openTime[0]
-                          : ''
-                      }
+                      disabled={isHoliday}
+                      inputValue={mainTime}
                       onChange={(value) => {
-                        const openTime = propsTime
-                          ? [...propsTime.openTime]
-                          : [];
-                        openTime[0] = value;
-                        onOpenTimeChange(day, openTime, propsTime);
+                        const openTime = [value, ...otherTime];
+                        onOpenTimeChange(day, openTime);
                       }}
                     />
                     <IconButton
                       disabled={
-                        propsTime?.isHoliday ||
-                        propsTime?.openTime[0] === undefined ||
-                        propsTime.openTime[propsTime.openTime.length - 1] === ''
+                        isHoliday ||
+                        mainTime === '' ||
+                        otherTime[otherTime.length - 1] === ''
                       }
                       icon={faPlusCircle}
                       style={{ marginLeft: '10px' }}
                       onClick={() => {
-                        onOpenTimeAdd(propsTime);
+                        onOpenTimeAdd(day);
                       }}
                     />
                   </td>
                   <td rowSpan={rowSpan} style={tdStyle}>
                     <FormCheck
-                      checked={propsTime?.isHoliday || false}
+                      checked={isHoliday}
                       onChange={(e) => {
-                        onIsHolidayChange(day, e.target.checked, propsTime);
+                        onIsHolidayChange(day, e.target.checked);
                       }}
                     />
                   </td>
                 </tr>
-                {rowSpan > 1 && propsTime?.openTime && !propsTime.isHoliday && (
-                  <>
-                    {propsTime.openTime
-                      .slice(1, propsTime.openTime.length)
-                      .map((time, index) => {
-                        return (
-                          <tr key={`${day}-${index + 1}`}>
-                            <td style={{ display: 'flex' }}>
-                              <MyInput
-                                inputValue={time}
-                                onChange={(value) => {
-                                  const openTime = [...propsTime.openTime];
-                                  openTime[index + 1] = value;
-                                  onOpenTimeChange(day, openTime, propsTime);
-                                }}
-                              />
-                              <IconButton
-                                icon={faMinus}
-                                style={{ marginLeft: '12px' }}
-                                onClick={() => {
-                                  const openTime = [...propsTime.openTime];
-                                  openTime.splice(index + 1, 1);
-                                  onOpenTimeChange(day, openTime, propsTime);
-                                }}
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </>
-                )}
+                {otherTime.map((time, index) => {
+                  return (
+                    <tr key={`${day}-${index + 1}`}>
+                      <td style={{ display: 'flex' }}>
+                        <MyInput
+                          inputValue={time}
+                          onChange={(value) => {
+                            const openTime = [mainTime, ...otherTime];
+                            openTime[index + 1] = value;
+                            onOpenTimeChange(day, openTime);
+                          }}
+                        />
+                        <IconButton
+                          icon={faMinus}
+                          style={{ marginLeft: '12px' }}
+                          onClick={() => {
+                            const openTime = [mainTime, ...otherTime];
+                            openTime.splice(index + 1, 1);
+                            onOpenTimeChange(day, openTime);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
               </>
             );
           })}
